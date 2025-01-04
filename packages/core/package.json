@@ -4,12 +4,13 @@
   "description": "Composable react primitives for form-associated elements",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "lint": "eslint \"src/**\"",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
   "files": [
-    "src"
+    "dist"
   ],
   "repository": {
     "type": "git",
