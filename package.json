@@ -1,0 +1,23 @@
+{
+  "name": "react-dom-form-monorepo",
+  "private": true,
+  "description": "",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcomuser/react-dom-form.git"
+  },
+  "author": "Marco Muser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcomuser/react-dom-form/issues"
+  },
+  "homepage": "https://github.com/marcomuser/react-dom-form#readme"
+}
