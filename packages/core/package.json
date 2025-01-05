@@ -6,6 +6,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint \"src/**\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
@@ -23,7 +25,6 @@
   },
   "homepage": "https://github.com/marcomuser/react-dom-form#readme",
   "peerDependencies": {
-    "react": ">=19.0.0",
-    "react-dom": ">=19.0.0"
+    "react": ">=19.0.0"
   }
 }
