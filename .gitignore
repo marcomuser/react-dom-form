@@ -21,5 +21,8 @@ logs/
 *.log
 npm-debug.log*
 
+# test
+*.vitest-temp.json
+
 # misc
 .DS_Store
