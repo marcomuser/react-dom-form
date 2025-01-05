@@ -15,7 +15,7 @@ describe("StructuredFormValue", () => {
   });
 
   it("should handle Blob and File", () => {
-    expectTypeOf<StructuredFormValue<Blob>>().toEqualTypeOf<Blob>();
+    expectTypeOf<StructuredFormValue<Blob>>().toEqualTypeOf<File>();
     expectTypeOf<StructuredFormValue<File>>().toEqualTypeOf<File>();
   });
 

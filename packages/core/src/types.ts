@@ -5,6 +5,8 @@ export type StructuredFormValue<Schema> =
       ? Array<StructuredFormValue<Item>>
       : Schema extends number | boolean | Date | bigint
         ? string
-        : Schema extends null
-          ? undefined
-          : Schema;
+        : Schema extends Blob
+          ? File
+          : Schema extends null
+            ? undefined
+            : Schema;
