@@ -1,0 +1,41 @@
+{
+  "name": "react-dom-form-monorepo",
+  "private": true,
+  "description": "Composable react primitives for form-associated elements",
+  "type": "module",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "core": "npm --workspace=packages/core run",
+    "format:check": "prettier . --check",
+    "format:write": "prettier . --write",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcomuser/react-dom-form.git"
+  },
+  "author": "Marco Muser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcomuser/react-dom-form/issues"
+  },
+  "homepage": "https://github.com/marcomuser/react-dom-form#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/react": "^19.0.2",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.0",
+    "vitest": "^2.1.8"
+  }
+}

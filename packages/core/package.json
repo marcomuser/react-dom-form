@@ -1,0 +1,30 @@
+{
+  "name": "@react-dom-form/core",
+  "version": "0.0.0",
+  "description": "Composable react primitives for form-associated elements",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint \"src/**\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcomuser/react-dom-form.git"
+  },
+  "author": "Marco Muser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcomuser/react-dom-form/issues"
+  },
+  "homepage": "https://github.com/marcomuser/react-dom-form#readme",
+  "peerDependencies": {
+    "react": ">=19.0.0"
+  }
+}
