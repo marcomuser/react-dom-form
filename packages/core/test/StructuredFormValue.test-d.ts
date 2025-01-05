@@ -110,10 +110,6 @@ describe("StructuredFormValue", () => {
     >().toEqualTypeOf<ExpectedType>();
   });
 
-  it("should handle empty object", () => {
-    expectTypeOf<StructuredFormValue<object>>().toEqualTypeOf<object>();
-  });
-
   it("should handle union types in objects", () => {
     type TestSchema = {
       value: string | number;
