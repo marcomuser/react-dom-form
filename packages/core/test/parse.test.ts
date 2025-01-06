@@ -93,4 +93,51 @@ describe("parse", () => {
       ],
     });
   });
+
+  it("should handle duplicate keys as an array of values", () => {
+    const formData = new FormData();
+    formData.append("item", "apple");
+    formData.append("item", "banana");
+    formData.append("item", "orange");
+
+    const parsedData = parse(formData);
+    expect(parsedData).toEqual({ item: ["apple", "banana", "orange"] });
+  });
+
+  it("should handle duplicate keys in nested objects", () => {
+    const formData = new FormData();
+    formData.append("items.name", "apple");
+    formData.append("items.name", "banana");
+
+    const parsedData = parse(formData);
+    expect(parsedData).toEqual({ items: { name: ["apple", "banana"] } });
+  });
+
+  it("should handle duplicate keys in nested arrays", () => {
+    const formData = new FormData();
+    formData.append("items[0].name", "apple");
+    formData.append("items[0].name", "banana");
+    formData.append("items[1].name", "orange");
+    formData.append("items[1].name", "grape");
+
+    const parsedData = parse(formData);
+    expect(parsedData).toEqual({
+      items: [{ name: ["apple", "banana"] }, { name: ["orange", "grape"] }],
+    });
+  });
+
+  it("should handle duplicate keys mixed with unique keys", () => {
+    const formData = new FormData();
+    formData.append("name", "Test User");
+    formData.append("items", "apple");
+    formData.append("items", "banana");
+    formData.append("count", "42");
+
+    const parsedData = parse(formData);
+    expect(parsedData).toEqual({
+      name: "Test User",
+      item: ["apple", "banana"],
+      count: "42",
+    });
+  });
 });
