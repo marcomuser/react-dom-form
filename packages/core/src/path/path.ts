@@ -20,7 +20,11 @@ export function setPath<T extends BaseDeepMap, K extends AllPaths<T>>(
   path: K,
   value: FromPath<T, K>,
 ): T {
-  return setByKey(obj != null ? obj : {}, getAllKeysFromPath(path), value);
+  return setByKey(
+    obj != null ? obj : ({} as T),
+    getAllKeysFromPath(path),
+    value,
+  );
 }
 
 function setByKey<T extends BaseDeepMap>(
