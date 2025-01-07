@@ -26,5 +26,6 @@
   "homepage": "https://github.com/marcomuser/react-dom-form#readme",
   "peerDependencies": {
     "react": ">=19.0.0"
-  }
+  },
+  "dependencies": {}
 }

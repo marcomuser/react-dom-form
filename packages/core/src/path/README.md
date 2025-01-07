@@ -1,1 +1,0 @@
-The files in this subdirectory were originally ported from [nanostores](https://github.com/nanostores/nanostores) and developed further for specific usage in the context of a form library. To comply with the copyright notice of the MIT license, a copy of the nanostores license is included in this directory as well.

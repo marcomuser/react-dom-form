@@ -1,0 +1,1 @@
+The files in this subdirectory were originally ported from [moderndash](https://github.com/Maggi64/moderndash) and developed further for specific usage in the context of a form library. To comply with the copyright notice of the MIT license, a copy of the moderndash license is included in this directory as well.
