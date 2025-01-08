@@ -27,5 +27,7 @@
   "peerDependencies": {
     "react": ">=19.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "type-fest": "^4.31.0"
+  }
 }
