@@ -1,3 +1,5 @@
+import type { Get, Paths } from "type-fest";
+
 export type StructuredFormValue<Schema> =
   Schema extends Record<PropertyKey, unknown>
     ? { [Key in keyof Schema]: StructuredFormValue<Schema[Key]> }
@@ -5,6 +7,18 @@ export type StructuredFormValue<Schema> =
       ? Array<StructuredFormValue<Item>>
       : Schema extends number | boolean | Date | bigint
         ? string
-        : Schema extends null
-          ? undefined
-          : Schema;
+        : Schema extends Blob
+          ? File
+          : Schema extends null
+            ? undefined
+            : Schema;
+
+export type PathsFromObject<BaseType> = Paths<
+  BaseType,
+  { bracketNotation: true }
+>;
+
+export type GetFromObject<
+  BaseType,
+  Path extends PathsFromObject<BaseType>,
+> = Get<BaseType, Path, { strict: true }>;

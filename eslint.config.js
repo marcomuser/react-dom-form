@@ -15,6 +15,7 @@ export default tseslint.config(
       "react-hooks": reactHooks,
     },
     rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
       ...reactHooks.configs.recommended.rules,
     },
   },
