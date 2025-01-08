@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getPath, setPath } from "../src/path.js";
 
-describe("path", () => {
+describe("getPath", () => {
   it("path evaluates correct value", () => {
     const exampleObj = {
       a: "123",
@@ -22,7 +22,9 @@ describe("path", () => {
     // @ts-expect-error: incorrect key here
     expect(getPath(exampleObj, "abra.cadabra.booms")).toBe(undefined);
   });
+});
 
+describe("setPath", () => {
   it("simple path setting", () => {
     type TestObj = {
       a: {
