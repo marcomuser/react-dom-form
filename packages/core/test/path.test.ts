@@ -1,3 +1,11 @@
+/**
+ * This file was originally ported from nanostores: https://github.com/nanostores/nanostores
+ * @license
+ * Copyright 2020 Andrey Sitnik <andrey@sitnik.ru>
+ * Copyright (c) 2025 Marco Muser
+ * SPDX-License-Identifier: MIT
+ */
+
 import { describe, expect, expectTypeOf, it } from "vitest";
 import { getPath, setPath } from "../src/path.js";
 
