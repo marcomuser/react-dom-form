@@ -5,8 +5,13 @@ export function parse<
   FormValues extends Record<PropertyKey, any> = Record<PropertyKey, unknown>,
 >(formData: FormData): StructuredFormValue<FormValues> {
   let formValues = {} as StructuredFormValue<FormValues>;
-  for (const [key, val] of formData.entries()) {
+  const keys = new Set(formData.keys());
+
+  for (const key of keys) {
+    const allVal = formData.getAll(key);
+    const val = allVal.length > 1 ? allVal : allVal.at(0);
     formValues = setPath(formValues, key, val);
   }
+
   return formValues;
 }

@@ -94,7 +94,7 @@ describe("parse", () => {
     });
   });
 
-  it.skip("should handle duplicate keys as an array of values", () => {
+  it("should handle duplicate keys as an array of values", () => {
     const formData = new FormData();
     formData.append("item", "apple");
     formData.append("item", "banana");
@@ -104,7 +104,7 @@ describe("parse", () => {
     expect(parsedData).toEqual({ item: ["apple", "banana", "orange"] });
   });
 
-  it.skip("should handle duplicate keys in nested objects", () => {
+  it("should handle duplicate keys in nested objects", () => {
     const formData = new FormData();
     formData.append("items.name", "apple");
     formData.append("items.name", "banana");
@@ -113,7 +113,7 @@ describe("parse", () => {
     expect(parsedData).toEqual({ items: { name: ["apple", "banana"] } });
   });
 
-  it.skip("should handle duplicate keys in nested arrays", () => {
+  it("should handle duplicate keys in nested arrays", () => {
     const formData = new FormData();
     formData.append("items[0].name", "apple");
     formData.append("items[0].name", "banana");
@@ -126,7 +126,7 @@ describe("parse", () => {
     });
   });
 
-  it.skip("should handle duplicate keys mixed with unique keys", () => {
+  it("should handle duplicate keys mixed with unique keys", () => {
     const formData = new FormData();
     formData.append("name", "Test User");
     formData.append("items", "apple");
@@ -136,8 +136,29 @@ describe("parse", () => {
     const parsedData = parse(formData);
     expect(parsedData).toEqual({
       name: "Test User",
-      item: ["apple", "banana"],
+      items: ["apple", "banana"],
       count: "42",
+    });
+  });
+
+  it("should handle duplicate/unique keys with empty strings", () => {
+    const formData = new FormData();
+    formData.append("name", "Test User");
+    formData.append("items", "apple");
+    formData.append("items", "");
+    formData.append("items", "banana");
+    formData.append("count", "42");
+    formData.append("emptyValue", "");
+    formData.append("nested.emptyValue", "");
+    formData.append("nested.items", "first");
+    formData.append("nested.items", "second");
+
+    expect(parse(formData)).toStrictEqual({
+      name: "Test User",
+      items: ["apple", "", "banana"],
+      count: "42",
+      emptyValue: "",
+      nested: { emptyValue: "", items: ["first", "second"] },
     });
   });
 });
