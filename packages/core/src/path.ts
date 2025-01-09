@@ -11,7 +11,8 @@ import type { GetFromObject, PathsFromObject } from "./types.js";
 /**
  * Get a value by object path. `undefined` if key is missing.
  *
- * ```
+ * @example
+ * ```ts
  * getPath({ a: { b: { c: ['hey', 'Hi!'] } } }, 'a.b.c[1]') // Returns 'Hi!'
  * ```
  *
@@ -40,9 +41,10 @@ export function getPath<
  * -- some sub-objects may still be shared between the old value and the new
  * one). Sparse arrays will be created if you set arbitrary length.
  *
- * ```
+ * @example
+ * ```ts
  * setPath({ a: { b: { c: [] } } }, 'a.b.c[1]', 'hey')
- * // Returns `{ a: { b: { c: [<empty>, 'hey'] } } }`
+ * // Returns { a: { b: { c: [<empty>, 'hey'] } } }
  * ```
  *
  * @param obj Any object.
