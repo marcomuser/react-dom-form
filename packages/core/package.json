@@ -34,6 +34,6 @@
     "react": ">=19.0.0"
   },
   "dependencies": {
-    "type-fest": "^4.31.0"
+    "type-fest": "^4.32.0"
   }
 }
