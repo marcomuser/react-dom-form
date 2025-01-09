@@ -16,7 +16,7 @@ describe("getPath", () => {
       b: { c: 123, d: [{ e: 123 }] },
       f: [
         [1, 2],
-        [{ g: 3 }, 4],
+        [5, 4],
       ],
     };
 
@@ -27,17 +27,27 @@ describe("getPath", () => {
 
     expect(getPath(exampleObj, "f[0][1]")).toBe(2);
     expectTypeOf(getPath(exampleObj, "f[0][1]")).toEqualTypeOf<
-      // @ts-expect-error the GET type of type-fest doesn't yet support multidimensional arrays
-      number | undefined
-    >();
-    expect(getPath(exampleObj, "f[1][0].g")).toBe(3);
-    expectTypeOf(getPath(exampleObj, "f[1][0].g")).toEqualTypeOf<
-      // @ts-expect-error the GET type of type-fest doesn't yet support multidimensional arrays
       number | undefined
     >();
 
     // @ts-expect-error: incorrect key here
     expect(getPath(exampleObj, "abra.cadabra.booms")).toBeUndefined();
+  });
+
+  it("supports multidimensional arrays with diverging shape", () => {
+    const exampleObj = {
+      f: [
+        [1, 2],
+        [{ g: 3 }, 4],
+      ],
+    };
+
+    expect(getPath(exampleObj, "f[1][0].g")).toBe(3);
+    expectTypeOf(getPath(exampleObj, "f[1][0].g")).toEqualTypeOf<
+      // @ts-expect-error TypeScript infers `f` as `(number[] | { g: number }[])[]` due to the mixed types in the inner arrays.
+      // This union type prevents precise type checking of nested properties like `f[1][0].g`, as TS doesn't know for certain that `f[1][0]` will have a `g` property.
+      number | undefined
+    >();
   });
 
   it("should have type number for number property access", () => {
