@@ -14,6 +14,12 @@
   "files": [
     "dist"
   ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcomuser/react-dom-form.git"
@@ -27,5 +33,7 @@
   "peerDependencies": {
     "react": ">=19.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "type-fest": "^4.32.0"
+  }
 }
