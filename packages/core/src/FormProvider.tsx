@@ -11,8 +11,8 @@ export const FormContext: Context<FormProviderProps | null> =
   createContext<FormProviderProps | null>(null);
 
 export interface FormProviderProps {
-  defaultValues?: UnknownRecord;
-  submitError?: UnknownRecord;
+  defaultValues?: UnknownRecord | undefined;
+  submitError?: UnknownRecord | undefined;
   formRef: RefObject<HTMLFormElement | null>;
 }
 
