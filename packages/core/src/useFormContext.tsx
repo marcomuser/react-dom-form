@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { use } from "react";
 import { FormContext, type FormProviderProps } from "./FormProvider.js";
 import type { UnknownRecord } from "type-fest";
 import type { AnyRecord } from "./types.js";
@@ -15,7 +15,7 @@ export function useFormContext<
   DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
   SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
 >(): TFormContext<DefaultValues, SubmitError> {
-  const value = useContext(FormContext);
+  const value = use(FormContext);
 
   if (value === null) {
     throw new Error("useFormContext must be used under FormProvider");
