@@ -187,4 +187,32 @@ describe("setPath", () => {
 
     expect(obj).toStrictEqual({ "123key": "value", key123: "value" });
   });
+
+  it("ensures referential equality for unchanged parts of the object", () => {
+    const obj = {
+      a: {
+        b: "c",
+        c: ["d", "f"],
+      },
+    };
+
+    const newObj = setPath(obj, "a.b", "f");
+
+    expect(obj.a.c).toBe(newObj.a.c);
+  });
+
+  it("ensures referential inequality for updated parts of the object", () => {
+    const obj = {
+      a: {
+        b: "c",
+        c: ["d", "f"],
+      },
+    };
+
+    const newObj = setPath(obj, "a.b", "f");
+
+    expect(obj).not.toBe(newObj);
+    expect(obj.a).not.toBe(newObj.a);
+    expect(obj.a.b).not.toBe(newObj.a.b);
+  });
 });
