@@ -6,7 +6,8 @@
  * SPDX-License-Identifier: MIT
  */
 
-import type { GetFromObject, PathsFromObject } from "./types.js";
+import type { UnknownRecord } from "type-fest";
+import type { AnyRecord, GetFromObject, PathsFromObject } from "./types.js";
 
 /**
  * Get a value by object path. `undefined` if key is missing.
@@ -20,10 +21,10 @@ import type { GetFromObject, PathsFromObject } from "./types.js";
  * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
  * @returns The value for this path. Undefined if key is missing.
  */
-export function getPath<
-  T extends Record<PropertyKey, any>,
-  K extends PathsFromObject<T>,
->(obj: T, path: K): GetFromObject<T, K> {
+export function getPath<T extends AnyRecord, K extends PathsFromObject<T>>(
+  obj: T,
+  path: K,
+): GetFromObject<T, K> {
   const allKeys = getAllKeysFromPath(path);
   let res = obj;
   for (const key of allKeys) {
@@ -51,11 +52,11 @@ export function getPath<
  * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
  * @returns The new object.
  */
-export function setPath<
-  TObj extends Record<PropertyKey, unknown>,
-  TPath extends string,
-  TVal,
->(obj: TObj, path: TPath, value: TVal): TObj {
+export function setPath<TObj extends UnknownRecord, TPath extends string, TVal>(
+  obj: TObj,
+  path: TPath,
+  value: TVal,
+): TObj {
   return setByKey(
     obj != null ? obj : ({} as TObj),
     getAllKeysFromPath(path),
@@ -63,7 +64,7 @@ export function setPath<
   ) as TObj;
 }
 
-function setByKey<TObj extends Record<PropertyKey, any>>(
+function setByKey<TObj extends AnyRecord>(
   obj: TObj,
   splittedKeys: string[],
   value: unknown,
@@ -102,11 +103,7 @@ function getKeyAndIndicesFromKey(key: string): string[] {
 }
 
 const IS_NUMBER = /^\d+$/;
-function ensureKey(
-  obj: Record<PropertyKey, any>,
-  key: string,
-  nextKey: string,
-) {
+function ensureKey(obj: AnyRecord, key: string, nextKey: string) {
   if (key in obj) {
     return;
   }
