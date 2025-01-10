@@ -5,13 +5,14 @@ import {
   type ReactElement,
   type RefObject,
 } from "react";
+import type { UnknownRecord } from "type-fest";
 
 export const FormContext: Context<FormProviderProps | null> =
   createContext<FormProviderProps | null>(null);
 
 export interface FormProviderProps {
-  defaultValues?: Record<PropertyKey, unknown>;
-  submitError?: Record<PropertyKey, unknown>;
+  defaultValues?: UnknownRecord;
+  submitError?: UnknownRecord;
   formRef: RefObject<HTMLFormElement | null>;
 }
 

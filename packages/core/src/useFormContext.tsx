@@ -1,21 +1,19 @@
 import { useContext } from "react";
 import { FormContext, type FormProviderProps } from "./FormProvider.js";
+import type { UnknownRecord } from "type-fest";
+import type { AnyRecord } from "./types.js";
 
 interface TFormContext<
-  DefaultValues extends Record<PropertyKey, unknown> | undefined,
-  SubmitError extends Record<PropertyKey, unknown> | undefined,
+  DefaultValues extends UnknownRecord | undefined,
+  SubmitError extends UnknownRecord | undefined,
 > extends FormProviderProps {
   defaultValues: DefaultValues;
   submitError: SubmitError;
 }
 
 export function useFormContext<
-  DefaultValues extends Record<PropertyKey, any> | undefined =
-    | Record<PropertyKey, unknown>
-    | undefined,
-  SubmitError extends Record<PropertyKey, any> | undefined =
-    | Record<PropertyKey, unknown>
-    | undefined,
+  DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
+  SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
 >(): TFormContext<DefaultValues, SubmitError> {
   const value = useContext(FormContext);
 

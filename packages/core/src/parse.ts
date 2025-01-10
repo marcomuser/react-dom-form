@@ -1,5 +1,6 @@
+import type { UnknownRecord } from "type-fest";
 import { setPath } from "./path.js";
-import type { StructuredFormValue } from "./types.js";
+import type { AnyRecord, StructuredFormValue } from "./types.js";
 
 /**
  * Parses a `FormData` object into a structured object with typed values.
@@ -19,9 +20,9 @@ import type { StructuredFormValue } from "./types.js";
  * @param formData A `FormData` object.
  * @returns An object representing the form data, with types derived from the `FormValues` generic.
  */
-export function parse<
-  FormValues extends Record<PropertyKey, any> = Record<PropertyKey, unknown>,
->(formData: FormData): StructuredFormValue<FormValues> {
+export function parse<FormValues extends AnyRecord = UnknownRecord>(
+  formData: FormData,
+): StructuredFormValue<FormValues> {
   let formValues = {} as StructuredFormValue<FormValues>;
   const keys = new Set(formData.keys());
 
