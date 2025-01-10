@@ -1,8 +1,8 @@
 import {
   createContext,
   type Context,
+  type JSX,
   type PropsWithChildren,
-  type ReactElement,
   type RefObject,
 } from "react";
 import type { UnknownRecord } from "type-fest";
@@ -21,7 +21,7 @@ export function FormProvider({
   submitError,
   formRef,
   children,
-}: PropsWithChildren<FormProviderProps>): ReactElement {
+}: PropsWithChildren<FormProviderProps>): JSX.Element {
   return (
     <FormContext value={{ defaultValues, submitError, formRef }}>
       {children}
