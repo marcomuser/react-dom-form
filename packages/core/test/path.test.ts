@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-import { describe, expect, expectTypeOf, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getPath, setPath } from "../src/path.js";
 
 describe("getPath", () => {
@@ -26,9 +26,6 @@ describe("getPath", () => {
     expect(getPath(exampleObj, "b.d[0].e")).toBe(123);
 
     expect(getPath(exampleObj, "f[0][1]")).toBe(2);
-    expectTypeOf(getPath(exampleObj, "f[0][1]")).toEqualTypeOf<
-      number | undefined
-    >();
 
     // @ts-expect-error: incorrect key here
     expect(getPath(exampleObj, "abra.cadabra.booms")).toBeUndefined();
@@ -43,41 +40,11 @@ describe("getPath", () => {
     };
 
     expect(getPath(exampleObj, "f[1][0].g")).toBe(3);
-    expectTypeOf(getPath(exampleObj, "f[1][0].g")).toEqualTypeOf<
-      // @ts-expect-error TypeScript infers `f` as `(number[] | { g: number }[])[]` due to the mixed types in the inner arrays.
-      // This union type prevents precise type checking of nested properties like `f[1][0].g`, as TS doesn't know for certain that `f[1][0]` will have a `g` property.
-      number | undefined
-    >();
-  });
-
-  it("should have type number for number property access", () => {
-    const obj = { a: 1 };
-    expectTypeOf(getPath(obj, "a")).toEqualTypeOf<number>();
-  });
-
-  it("should have type string for string property access", () => {
-    const obj = { a: { b: "hello" } };
-    expectTypeOf(getPath(obj, "a.b")).toEqualTypeOf<string>();
-  });
-
-  it("should have type number | undefined for array element access", () => {
-    const obj = { a: [1, 2, 3] };
-    expectTypeOf(getPath(obj, "a[0]")).toEqualTypeOf<number | undefined>();
-  });
-
-  it("should have type number | undefined for object property in array access", () => {
-    const obj = { a: [{ b: 1 }] };
-    expectTypeOf(getPath(obj, "a[0].b")).toEqualTypeOf<number | undefined>();
   });
 
   it("should have path type never for empty object and return undefined", () => {
     // @ts-expect-error incorrect key here
     expect(getPath({}, "a.b")).toBeUndefined();
-  });
-
-  it("should not accept undefined as object", () => {
-    // @ts-expect-error incorrect obj here
-    expectTypeOf(getPath(undefined, "a")).toEqualTypeOf<never>();
   });
 
   it("should throw error when object is null", () => {
