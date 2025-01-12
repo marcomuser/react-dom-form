@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from "vitest";
-import type { StructuredFormValue } from "../src/types.js";
+import type { StructuredFormValue } from "../../src/types.js";
 
 describe("StructuredFormValue", () => {
   it("should handle primitive types", () => {

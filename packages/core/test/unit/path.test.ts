@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { getPath, setPath } from "../src/path.js";
+import { getPath, setPath } from "../../src/path.js";
 
 describe("getPath", () => {
   it("path evaluates correct value", () => {

@@ -1,5 +1,5 @@
 import { describe, expectTypeOf, it } from "vitest";
-import { getPath } from "../src/path.js";
+import { getPath } from "../../src/path.js";
 
 describe("getPath types", () => {
   it("should have type number for number property access", () => {

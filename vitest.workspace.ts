@@ -3,7 +3,7 @@ import { defineWorkspace } from "vitest/config";
 export default defineWorkspace([
   {
     test: {
-      include: ["packages/**/test/*.test.{ts,tsx}"],
+      include: ["packages/*/test/unit/*.test.{ts,tsx}"],
       name: "node",
       environment: "node",
       typecheck: {
@@ -14,7 +14,7 @@ export default defineWorkspace([
   },
   {
     test: {
-      include: ["packages/**/test/*.browser.{ts,tsx}"],
+      include: ["packages/*/test/browser/*.test.{ts,tsx}"],
       name: "browser",
       browser: {
         enabled: true,
