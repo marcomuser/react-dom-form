@@ -1,14 +1,7 @@
-import {
-  createContext,
-  type Context,
-  type JSX,
-  type PropsWithChildren,
-  type RefObject,
-} from "react";
+import { type JSX, type PropsWithChildren, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
-
-export const FormContext: Context<FormProviderProps | null> =
-  createContext<FormProviderProps | null>(null);
+import { getFieldProps } from "./getFieldProps.js";
+import { FormContext } from "./FormContext.js";
 
 export interface FormProviderProps {
   /**
@@ -61,23 +54,30 @@ export interface FormProviderProps {
    * ```tsx
    * const formRef = useRef<HTMLFormElement>(null);
    * <form ref={formRef}>
-   *   <FormProvider formRef={formRef}>
+   *   <FormProvider ref={formRef}>
    *     ...
    *   </FormProvider>
    * </form>
    * ```
    */
-  formRef: RefObject<HTMLFormElement | null>;
+  ref: RefObject<HTMLFormElement | null>;
 }
 
 export function FormProvider({
   defaultValues,
   submitError,
-  formRef,
+  ref,
   children,
 }: PropsWithChildren<FormProviderProps>): JSX.Element {
   return (
-    <FormContext value={{ defaultValues, submitError, formRef }}>
+    <FormContext
+      value={{
+        defaultValues,
+        submitError,
+        formRef: ref,
+        getFieldProps: (options) => getFieldProps(ref, options),
+      }}
+    >
       {children}
     </FormContext>
   );

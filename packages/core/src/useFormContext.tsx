@@ -1,15 +1,7 @@
 import { use } from "react";
-import { FormContext, type FormProviderProps } from "./FormProvider.js";
 import type { UnknownRecord } from "type-fest";
 import type { AnyRecord } from "./types.js";
-
-interface FormContextValue<
-  DefaultValues extends UnknownRecord | undefined,
-  SubmitError extends UnknownRecord | undefined,
-> extends FormProviderProps {
-  defaultValues?: DefaultValues;
-  submitError?: SubmitError;
-}
+import { FormContext, type FormContextValue } from "./FormContext.js";
 
 /**
  * A custom hook to access the form context.
