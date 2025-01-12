@@ -75,15 +75,15 @@ describe("getFieldProps", () => {
     expect(password.validity.tooShort).toBe(false);
     expect(password.validity.valid).toBe(true);
 
-    await userEvent.fill(email, "test@test.com");
+    await userEvent.type(email, "test@test.com");
     expect(email.validity.valueMissing).toBe(false);
     expect(email.validity.valid).toBe(true);
 
-    await userEvent.fill(password, "12345");
+    await userEvent.type(password, "12345");
     expect(password.validity.tooShort).toBe(true);
     expect(password.validity.valid).toBe(false);
 
-    await userEvent.fill(password, "123456");
+    await userEvent.type(password, "6");
     expect(password.value).toBe("123456");
     expect(password.validity.tooShort).toBe(false);
     expect(password.validity.valid).toBe(true);
