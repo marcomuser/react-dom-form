@@ -9,8 +9,8 @@ import { FormContext, type FormContextValue } from "./FormContext.js";
  * @example
  * ```tsx
  * interface FormValues {
- *   name: string;
  *   email: string;
+ *   password: string;
  * }
  *
  * interface SubmitError {
