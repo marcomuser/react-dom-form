@@ -7,8 +7,8 @@ interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
   SubmitError extends UnknownRecord | undefined,
 > extends FormProviderProps {
-  defaultValues: DefaultValues;
-  submitError: SubmitError;
+  defaultValues?: DefaultValues;
+  submitError?: SubmitError;
 }
 
 /**
