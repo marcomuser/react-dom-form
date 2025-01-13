@@ -4,15 +4,9 @@ import { render } from "vitest-browser-react";
 import { userEvent } from "@vitest/browser/context";
 import { FormProvider } from "../../src/FormProvider.js";
 import { useFormContext } from "../../src/useFormContext.js";
-import type { ValidationRule } from "../../src/getFieldProps.js";
+import type { Constraints } from "../../src/getFieldProps.js";
 
-function Form({
-  required,
-  minLength,
-}: {
-  required: ValidationRule<boolean>;
-  minLength: ValidationRule<number>;
-}) {
+function Form({ required, minLength }: Constraints) {
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
@@ -24,13 +18,7 @@ function Form({
   );
 }
 
-function Fields({
-  required,
-  minLength,
-}: {
-  required: ValidationRule<boolean>;
-  minLength: ValidationRule<number>;
-}) {
+function Fields({ required, minLength }: Constraints) {
   const { getFieldProps } = useFormContext<{
     email: string;
     password: string;

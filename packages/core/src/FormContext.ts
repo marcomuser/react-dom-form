@@ -1,6 +1,6 @@
 import { createContext, type Context, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
-import type { FieldProps, Options } from "./getFieldProps.js";
+import type { FieldProps, FieldOptions } from "./getFieldProps.js";
 
 export interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
@@ -9,7 +9,7 @@ export interface FormContextValue<
   defaultValues?: DefaultValues;
   submitError?: SubmitError;
   formRef: RefObject<HTMLFormElement | null>;
-  getFieldProps: (options: Options<DefaultValues>) => FieldProps<DefaultValues>;
+  getFieldProps: (options: FieldOptions<DefaultValues>) => FieldProps;
 }
 
 export const FormContext: Context<FormContextValue<
