@@ -13,14 +13,9 @@ import { FormContext, type FormContextValue } from "./FormContext.js";
  *   password: string;
  * }
  *
- * interface SubmitError {
- *   errorMessage: string;
- * }
- *
- * function Fields() {
- *   const { defaultValues, submitError, formRef } = useFormContext<FormValues, SubmitError>();
- *
- *   return <input name="email" defaultValue={defaultValues?.email} />;
+ * function EmailInput() {
+ *   const { defaultValues, getFieldProps } = useFormContext<FormValues>();
+ *   return <input defaultValue={defaultValues?.email} {...getFieldProps({name: "email"})} />;
  * }
  */
 export function useFormContext<
