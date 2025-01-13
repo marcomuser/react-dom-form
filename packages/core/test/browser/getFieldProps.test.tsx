@@ -41,8 +41,8 @@ function Fields({ required, minLength }: Constraints) {
   );
 }
 
-describe("getFieldProps", () => {
-  it("renders the input fields with constraints", async () => {
+describe("getFieldProps with browser messages", () => {
+  it("should render the inputs with constraint attributes", async () => {
     const screen = render(<Form required={true} minLength={6} />);
 
     const email = screen.getByLabelText("email");
@@ -58,7 +58,7 @@ describe("getFieldProps", () => {
     await expect.element(password).toHaveAttribute("minLength");
   });
 
-  it("updates the validity state on user input", async () => {
+  it("should update validity state on user input", async () => {
     const screen = render(<Form required={true} minLength={6} />);
 
     const email = screen.getByLabelText("email").element() as HTMLInputElement;
@@ -85,30 +85,34 @@ describe("getFieldProps", () => {
     expect(password.validity.tooShort).toBe(false);
     expect(password.validity.valid).toBe(true);
   });
+});
 
-  it("sets the custom validity message", async () => {
+describe("getFieldProps with custom error messages", () => {
+  it("should set validationMessage after user input when constraint is violated", async () => {
     const screen = render(
-      <Form
-        required={{ value: true, message: "Required very much indeed" }}
-        minLength={{ value: 6, message: "Minimum 6 characters" }}
-      />,
+      <Form minLength={{ value: 6, message: "Minimum 6 characters" }} />,
     );
 
-    const email = screen.getByLabelText("email").element() as HTMLInputElement;
     const password = screen
       .getByLabelText("password")
       .element() as HTMLInputElement;
 
-    expect(email.validity.valid).toBe(false);
-    expect(email.validationMessage).toBe("Required very much indeed");
     expect(password.validity.valid).toBe(true);
     expect(password.validationMessage).toBe("");
 
-    await userEvent.type(email, "test@test.com");
-    expect(email.validity.valid).toBe(true);
-    expect(email.validationMessage).toBe("");
-    expect(password.validity.valid).toBe(true);
-    expect(password.validationMessage).toBe("");
+    await userEvent.type(password, "12345");
+    expect(password.validity.valid).toBe(false);
+    expect(password.validationMessage).toBe("Minimum 6 characters");
+  });
+
+  it("should reset validationMessage when input becomes valid", async () => {
+    const screen = render(
+      <Form minLength={{ value: 6, message: "Minimum 6 characters" }} />,
+    );
+
+    const password = screen
+      .getByLabelText("password")
+      .element() as HTMLInputElement;
 
     await userEvent.type(password, "12345");
     expect(password.validity.valid).toBe(false);
@@ -118,5 +122,20 @@ describe("getFieldProps", () => {
     expect(password.value).toBe("123456");
     expect(password.validity.valid).toBe(true);
     expect(password.validationMessage).toBe("");
+  });
+
+  it("should set required validity already on first render", async () => {
+    const screen = render(
+      <Form required={{ value: true, message: "Required very much indeed" }} />,
+    );
+
+    const email = screen.getByLabelText("email").element() as HTMLInputElement;
+
+    expect(email.validity.valid).toBe(false);
+    expect(email.validationMessage).toBe("Required very much indeed");
+
+    await userEvent.type(email, "test@test.com");
+    expect(email.validity.valid).toBe(true);
+    expect(email.validationMessage).toBe("");
   });
 });
