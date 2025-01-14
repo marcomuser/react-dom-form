@@ -20,11 +20,7 @@ export function serialize<T>(value: T): SerializedValue<T> {
     return result as SerializedValue<T>;
   }
 
-  if (
-    typeof value === "number" ||
-    typeof value === "boolean" ||
-    typeof value === "bigint"
-  ) {
+  if (typeof value === "number" || typeof value === "bigint") {
     return value.toString() as SerializedValue<T>;
   }
 
