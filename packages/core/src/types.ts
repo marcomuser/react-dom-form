@@ -1,16 +1,28 @@
 import type { Get, Paths, UnknownRecord } from "type-fest";
 
-export type StructuredFormValue<Schema> = Schema extends UnknownRecord
-  ? { [Key in keyof Schema]: StructuredFormValue<Schema[Key]> }
-  : Schema extends Array<infer Item>
-    ? Array<StructuredFormValue<Item>>
-    : Schema extends number | boolean | Date | bigint
+export type ParsedValue<Value> = Value extends UnknownRecord
+  ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
+  : Value extends Array<infer Item>
+    ? Array<ParsedValue<Item>>
+    : Value extends number | Date | bigint
       ? string
-      : Schema extends Blob
-        ? File
-        : Schema extends null
-          ? undefined
-          : Schema;
+      : Value extends boolean
+        ? string | undefined
+        : Value extends Blob
+          ? File
+          : Value extends null
+            ? undefined
+            : Value;
+
+export type SerializedValue<Value> = Value extends UnknownRecord
+  ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
+  : Value extends Array<infer Item>
+    ? Array<ParsedValue<Item>>
+    : Value extends number | Date | bigint
+      ? string
+      : Value extends null
+        ? undefined
+        : Value;
 
 export type PathsFromObject<BaseType> = Paths<
   BaseType,

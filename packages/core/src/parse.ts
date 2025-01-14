@@ -1,6 +1,6 @@
 import type { UnknownRecord } from "type-fest";
 import { setPath } from "./path.js";
-import type { AnyRecord, StructuredFormValue } from "./types.js";
+import type { AnyRecord, ParsedValue } from "./types.js";
 
 /**
  * Parses a `FormData` object into a structured object with typed values.
@@ -22,8 +22,8 @@ import type { AnyRecord, StructuredFormValue } from "./types.js";
  */
 export function parse<FormValues extends AnyRecord = UnknownRecord>(
   formData: FormData,
-): StructuredFormValue<FormValues> {
-  let formValues = {} as StructuredFormValue<FormValues>;
+): ParsedValue<FormValues> {
+  let formValues = {} as ParsedValue<FormValues>;
   const keys = new Set(formData.keys());
 
   for (const key of keys) {

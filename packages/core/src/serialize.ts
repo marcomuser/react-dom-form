@@ -1,13 +1,13 @@
 import type { UnknownRecord } from "type-fest";
-import type { StructuredFormValue } from "./types.js";
+import type { SerializedValue } from "./types.js";
 
-export function serialize<T>(value: T): StructuredFormValue<T> {
+export function serialize<T>(value: T): SerializedValue<T> {
   if (value === null) {
-    return undefined as StructuredFormValue<T>;
+    return undefined as SerializedValue<T>;
   }
 
   if (Array.isArray(value)) {
-    return value.map((item) => serialize(item)) as StructuredFormValue<T>;
+    return value.map((item) => serialize(item)) as SerializedValue<T>;
   }
 
   if (isPlainObject(value)) {
@@ -17,7 +17,7 @@ export function serialize<T>(value: T): StructuredFormValue<T> {
         result[key] = serialize((value as UnknownRecord)[key]);
       }
     }
-    return result as StructuredFormValue<T>;
+    return result as SerializedValue<T>;
   }
 
   if (
@@ -25,14 +25,14 @@ export function serialize<T>(value: T): StructuredFormValue<T> {
     typeof value === "boolean" ||
     typeof value === "bigint"
   ) {
-    return value.toString() as StructuredFormValue<T>;
+    return value.toString() as SerializedValue<T>;
   }
 
   if (value instanceof Date) {
-    return value.toISOString() as StructuredFormValue<T>;
+    return value.toISOString() as SerializedValue<T>;
   }
 
-  return value as StructuredFormValue<T>;
+  return value as SerializedValue<T>;
 }
 
 function isPlainObject(value: unknown): value is UnknownRecord {
