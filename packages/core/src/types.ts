@@ -15,9 +15,9 @@ export type ParsedValue<Value> = Value extends UnknownRecord
             : Value;
 
 export type SerializedValue<Value> = Value extends UnknownRecord
-  ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
+  ? { [Key in keyof Value]: SerializedValue<Value[Key]> }
   : Value extends Array<infer Item>
-    ? Array<ParsedValue<Item>>
+    ? Array<SerializedValue<Item>>
     : Value extends number | Date | bigint
       ? string
       : Value extends null
