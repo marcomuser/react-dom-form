@@ -1,26 +1,26 @@
 import { describe, expectTypeOf, it } from "vitest";
-import type { StructuredFormValue } from "../../src/types.js";
+import type { ParsedValue } from "../../src/types.js";
 
-describe("StructuredFormValue", () => {
+describe("ParsedValue", () => {
   it("should handle primitive types", () => {
-    expectTypeOf<StructuredFormValue<string>>().toEqualTypeOf<string>();
-    expectTypeOf<StructuredFormValue<number>>().toEqualTypeOf<string>();
-    expectTypeOf<StructuredFormValue<boolean>>().toEqualTypeOf<string>();
-    expectTypeOf<StructuredFormValue<Date>>().toEqualTypeOf<string>();
-    expectTypeOf<StructuredFormValue<bigint>>().toEqualTypeOf<string>();
+    expectTypeOf<ParsedValue<string>>().toEqualTypeOf<string>();
+    expectTypeOf<ParsedValue<number>>().toEqualTypeOf<string>();
+    expectTypeOf<ParsedValue<boolean>>().toEqualTypeOf<string | undefined>();
+    expectTypeOf<ParsedValue<Date>>().toEqualTypeOf<string>();
+    expectTypeOf<ParsedValue<bigint>>().toEqualTypeOf<string>();
   });
 
   it("should handle null", () => {
-    expectTypeOf<StructuredFormValue<null>>().toEqualTypeOf<undefined>();
+    expectTypeOf<ParsedValue<null>>().toEqualTypeOf<undefined>();
   });
 
   it("should handle Blob and File", () => {
-    expectTypeOf<StructuredFormValue<Blob>>().toEqualTypeOf<File>();
-    expectTypeOf<StructuredFormValue<File>>().toEqualTypeOf<File>();
+    expectTypeOf<ParsedValue<Blob>>().toEqualTypeOf<File>();
+    expectTypeOf<ParsedValue<File>>().toEqualTypeOf<File>();
   });
 
   it("should handle File in array", () => {
-    expectTypeOf<StructuredFormValue<File[]>>().toEqualTypeOf<File[]>();
+    expectTypeOf<ParsedValue<File[]>>().toEqualTypeOf<File[]>();
   });
 
   it("should handle flat object", () => {
@@ -32,9 +32,7 @@ describe("StructuredFormValue", () => {
       name: string;
       age: string;
     };
-    expectTypeOf<
-      StructuredFormValue<TestSchema>
-    >().toEqualTypeOf<ExpectedType>();
+    expectTypeOf<ParsedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
   });
 
   it("should handle nested objects", () => {
@@ -54,22 +52,18 @@ describe("StructuredFormValue", () => {
         };
       };
     };
-    expectTypeOf<
-      StructuredFormValue<TestSchema>
-    >().toEqualTypeOf<ExpectedType>();
+    expectTypeOf<ParsedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
   });
 
   it("should handle arrays of primitives", () => {
-    expectTypeOf<StructuredFormValue<string[]>>().toEqualTypeOf<string[]>();
-    expectTypeOf<StructuredFormValue<number[]>>().toEqualTypeOf<string[]>();
+    expectTypeOf<ParsedValue<string[]>>().toEqualTypeOf<string[]>();
+    expectTypeOf<ParsedValue<number[]>>().toEqualTypeOf<string[]>();
   });
 
   it("should handle arrays of objects", () => {
     type TestSchema = { value: number };
     type ExpectedType = { value: string }[];
-    expectTypeOf<
-      StructuredFormValue<TestSchema[]>
-    >().toEqualTypeOf<ExpectedType>();
+    expectTypeOf<ParsedValue<TestSchema[]>>().toEqualTypeOf<ExpectedType>();
   });
 
   it("should handle complex nested structure", () => {
@@ -99,15 +93,13 @@ describe("StructuredFormValue", () => {
         };
         meta:
           | {
-              active: string;
+              active: string | undefined;
             }[]
           | undefined;
       };
     };
 
-    expectTypeOf<
-      StructuredFormValue<TestSchema>
-    >().toEqualTypeOf<ExpectedType>();
+    expectTypeOf<ParsedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
   });
 
   it("should handle union types in objects", () => {
@@ -118,8 +110,6 @@ describe("StructuredFormValue", () => {
       value: string;
     };
 
-    expectTypeOf<
-      StructuredFormValue<TestSchema>
-    >().toEqualTypeOf<ExpectedType>();
+    expectTypeOf<ParsedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
   });
 });

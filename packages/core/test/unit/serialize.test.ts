@@ -12,9 +12,9 @@ describe("serialize", () => {
     expect(serialize(-42)).toBe("-42");
   });
 
-  it("serializes booleans to strings", () => {
-    expect(serialize(true)).toBe("true");
-    expect(serialize(false)).toBe("false");
+  it("does not serialize booleans", () => {
+    expect(serialize(true)).toBe(true);
+    expect(serialize(false)).toBe(false);
   });
 
   it("serializes dates to ISO strings", () => {
@@ -32,7 +32,7 @@ describe("serialize", () => {
     expect(serialize(obj)).toEqual({
       a: "1",
       b: "hello",
-      c: "true",
+      c: true,
       d: "2024-02-20T10:00:00.000Z",
     });
   });
@@ -43,11 +43,11 @@ describe("serialize", () => {
   });
 
   it("serializes arrays", () => {
-    const arr = [1, "test", true, new Date("2024-03-15T15:30:00.000Z")];
+    const arr = [1, "test", false, new Date("2024-03-15T15:30:00.000Z")];
     expect(serialize(arr)).toEqual([
       "1",
       "test",
-      "true",
+      false,
       "2024-03-15T15:30:00.000Z",
     ]);
   });
@@ -58,7 +58,7 @@ describe("serialize", () => {
       d: { e: [2, 3] },
     };
     expect(serialize(data)).toEqual({
-      a: ["1", { b: "true", c: "2024-10-10T00:00:00.000Z" }],
+      a: ["1", { b: true, c: "2024-10-10T00:00:00.000Z" }],
       d: { e: ["2", "3"] },
     });
   });
