@@ -13,6 +13,7 @@ export interface Constraints {
   required?: ValidationRule<boolean> | undefined;
   min?: ValidationRule<string | number> | undefined;
   max?: ValidationRule<string | number> | undefined;
+  step?: ValidationRule<string | number> | undefined;
   minLength?: ValidationRule<number> | undefined;
   maxLength?: ValidationRule<number> | undefined;
   pattern?: ValidationRule<RegExp> | undefined;
@@ -30,6 +31,7 @@ export interface FieldProps {
   required?: boolean | undefined;
   min?: string | number | undefined;
   max?: string | number | undefined;
+  step?: string | number | undefined;
   minLength?: number | undefined;
   maxLength?: number | undefined;
   pattern?: string | undefined;
