@@ -23,11 +23,12 @@ export interface FieldOptions<FormValues extends UnknownRecord | undefined>
   extends Constraints {
   name: PathsFromObject<FormValues>;
   onChange?: (event: ChangeEvent<any>) => void;
+  ref?: RefObject<unknown>;
 }
 
 export interface FieldProps {
   name: string;
-  onChange: (event: any) => void;
+  onChange: (event: ChangeEvent<any>) => void;
   ref: RefCallback<unknown>;
   required?: boolean | undefined;
   min?: string | number | undefined;
@@ -41,10 +42,10 @@ export interface FieldProps {
 export function getFieldProps<
   FormValues extends AnyRecord | undefined = UnknownRecord | undefined,
 >(
-  ref: RefObject<HTMLFormElement | null>,
+  formRef: RefObject<HTMLFormElement | null>,
   options: FieldOptions<FormValues>,
 ): FieldProps {
-  const { name, onChange, ...constraints } = options;
+  const { name, onChange, ref, ...constraints } = options;
 
   return {
     name,
@@ -61,6 +62,10 @@ export function getFieldProps<
         } else {
           node.setCustomValidity("");
         }
+      }
+
+      if (ref?.current) {
+        ref.current = node;
       }
     },
     onChange: (
