@@ -182,4 +182,23 @@ describe("setPath", () => {
     expect(obj.a).not.toBe(newObj.a);
     expect(obj.a.b).not.toBe(newObj.a.b);
   });
+
+  it("should not allow prototype pollution via __proto__", () => {
+    const obj = {};
+    const result = setPath(obj, "__proto__.polluted", "test");
+
+    // @ts-expect-error prototype pollution check
+    expect({}.polluted).toBeUndefined();
+    // @ts-expect-error prototype pollution check
+    expect(result.__proto__).toEqual({});
+  });
+
+  it("should not allow prototype pollution via constructor", () => {
+    const obj = {};
+    const result = setPath(obj, "constructor.prototype.polluted", "test");
+
+    // @ts-expect-error prototype pollution check
+    expect({}.polluted).toBeUndefined();
+    expect(result.constructor).toBe(Object);
+  });
 });

@@ -71,6 +71,13 @@ function setByKey<TObj extends AnyRecord>(
 ) {
   const key = splittedKeys[0];
 
+  if (
+    key === "__proto__" ||
+    (key === "constructor" && splittedKeys[1] === "prototype")
+  ) {
+    return obj;
+  }
+
   const copy = Array.isArray(obj) ? [...obj] : { ...obj };
   if (splittedKeys.length === 1) {
     if (value === undefined || value === null) {
