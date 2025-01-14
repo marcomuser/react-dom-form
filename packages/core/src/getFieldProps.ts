@@ -1,4 +1,4 @@
-import type { ChangeEvent, RefObject } from "react";
+import type { ChangeEvent, RefCallback, RefObject } from "react";
 import type { AnyRecord, PathsFromObject } from "./types.js";
 import type { UnknownRecord } from "type-fest";
 
@@ -28,6 +28,7 @@ export interface FieldOptions<FormValues extends UnknownRecord | undefined>
 export interface FieldProps {
   name: string;
   onChange: (event: any) => void;
+  ref: RefCallback<unknown>;
   required?: boolean | undefined;
   min?: string | number | undefined;
   max?: string | number | undefined;
@@ -46,15 +47,69 @@ export function getFieldProps<
   const { name, onChange, ...constraints } = options;
 
   return {
-    ...constraints,
     name,
+    ...Object.fromEntries(
+      Object.entries(constraints).map(([key, rule]) => [
+        key,
+        hasValidationMessage(rule) ? rule.value : rule,
+      ]),
+    ),
+    ref: (node: HTMLInputElement) => {
+      if (node && hasValidationMessage(constraints.required)) {
+        if (node.validity.valueMissing) {
+          node.setCustomValidity(constraints.required.message);
+        } else {
+          node.setCustomValidity("");
+        }
+      }
+    },
     onChange: (
       event: ChangeEvent<{
         validity: ValidityState;
         setCustomValidity(error: string): void;
       }>,
     ) => {
-      const { validity, setCustomValidity } = event.target;
+      Object.entries(constraints).forEach(([key, rule]) => {
+        if (hasValidationMessage(rule)) {
+          switch (key) {
+            case "required":
+              event.target.setCustomValidity(
+                event.target.validity.valueMissing ? rule.message : "",
+              );
+              break;
+            case "min":
+              event.target.setCustomValidity(
+                event.target.validity.rangeUnderflow ? rule.message : "",
+              );
+              break;
+            case "max":
+              event.target.setCustomValidity(
+                event.target.validity.rangeOverflow ? rule.message : "",
+              );
+              break;
+            case "step":
+              event.target.setCustomValidity(
+                event.target.validity.stepMismatch ? rule.message : "",
+              );
+              break;
+            case "minLength":
+              event.target.setCustomValidity(
+                event.target.validity.tooShort ? rule.message : "",
+              );
+              break;
+            case "maxLength":
+              event.target.setCustomValidity(
+                event.target.validity.tooLong ? rule.message : "",
+              );
+              break;
+            case "pattern":
+              event.target.setCustomValidity(
+                event.target.validity.patternMismatch ? rule.message : "",
+              );
+              break;
+          }
+        }
+      });
 
       if (onChange) {
         onChange(event);

@@ -102,6 +102,7 @@ describe("getFieldProps with custom error messages", () => {
 
     await userEvent.type(password, "12345");
     expect(password.validity.valid).toBe(false);
+    expect(password.validity.tooShort).toBe(true);
     expect(password.validationMessage).toBe("Minimum 6 characters");
   });
 
@@ -116,6 +117,7 @@ describe("getFieldProps with custom error messages", () => {
 
     await userEvent.type(password, "12345");
     expect(password.validity.valid).toBe(false);
+    expect(password.validity.tooShort).toBe(true);
     expect(password.validationMessage).toBe("Minimum 6 characters");
 
     await userEvent.type(password, "6");
@@ -132,10 +134,12 @@ describe("getFieldProps with custom error messages", () => {
     const email = screen.getByLabelText("email").element() as HTMLInputElement;
 
     expect(email.validity.valid).toBe(false);
+    expect(email.validity.valueMissing).toBe(true);
     expect(email.validationMessage).toBe("Required very much indeed");
 
     await userEvent.type(email, "test@test.com");
     expect(email.validity.valid).toBe(true);
+    expect(email.validity.valueMissing).toBe(false);
     expect(email.validationMessage).toBe("");
   });
 });
