@@ -31,7 +31,7 @@
   "homepage": "https://github.com/marcomuser/react-dom-form#readme",
   "devDependencies": {
     "@eslint/js": "^9.18.0",
-    "@types/react": "^19.0.4",
+    "@types/react": "^19.0.7",
     "@vitest/browser": "^2.1.8",
     "eslint": "^9.18.0",
     "eslint-plugin-react-hooks": "^5.1.0",
@@ -39,7 +39,7 @@
     "playwright": "^1.49.1",
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.19.1",
+    "typescript-eslint": "^8.20.0",
     "vitest": "^2.1.8",
     "vitest-browser-react": "^0.0.4"
   }
