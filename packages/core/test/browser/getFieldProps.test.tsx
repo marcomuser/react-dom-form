@@ -100,7 +100,7 @@ describe("getFieldProps with browser messages", () => {
 });
 
 describe("getFieldProps with custom error messages", () => {
-  it("should constraint username with pattern", async () => {
+  it("should constraint username with pattern and set custom validationMessage", async () => {
     const screen = render(<FormWithCustomMessages />);
     const username = screen
       .getByTestId("username")
@@ -117,7 +117,7 @@ describe("getFieldProps with custom error messages", () => {
     expect(username.validationMessage).toBe("");
   });
 
-  it("should constraint password length", async () => {
+  it("should constraint password length and set custom validationMessage", async () => {
     const screen = render(<FormWithCustomMessages />);
     const password = screen
       .getByTestId("password")
@@ -134,7 +134,7 @@ describe("getFieldProps with custom error messages", () => {
     expect(password.validationMessage).toBe("");
   });
 
-  it("should constraint age range and step", async () => {
+  it("should constraint age range and step and set custom validationMessage", async () => {
     const screen = render(<FormWithCustomMessages />);
     const age = screen.getByTestId("age").element() as HTMLInputElement;
 
@@ -158,7 +158,7 @@ describe("getFieldProps with custom error messages", () => {
     expect(age.validationMessage).toBe("");
   });
 
-  it("should constraint required select", async () => {
+  it("should constraint required select and set custom validationMessage", async () => {
     const screen = render(<FormWithCustomMessages />);
     const color = screen.getByTestId("color").element() as HTMLSelectElement;
 
