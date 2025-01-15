@@ -1,33 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 import { userEvent } from "@vitest/browser/context";
-
-function FormWithBrowserMessages() {
-  return (
-    <form>
-      <input data-testid="username" name="username" pattern="[a-z]{4,8}" />
-      <input
-        data-testid="password"
-        name="password"
-        minLength={6}
-        maxLength={9}
-      />
-      <input
-        type="number"
-        data-testid="age"
-        name="age"
-        min="0"
-        max="120"
-        step="1"
-      />
-      <select data-testid="color" name="color" required>
-        <option value=""></option>
-        <option value="blue"></option>
-        <option value="red"></option>
-      </select>
-    </form>
-  );
-}
+import { FormWithBrowserMessages } from "./fixtures/FormWithBrowserMessages.js";
 
 describe("getFieldProps with browser messages", () => {
   it("should render the inputs with constraint attributes", async () => {

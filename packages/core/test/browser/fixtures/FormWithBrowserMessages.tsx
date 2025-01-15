@@ -16,7 +16,7 @@ export function FormWithBrowserMessages() {
         data-testid="username"
         {...getFieldProps<FormValues>(formRef, {
           name: "username",
-          pattern: "w{3,16}",
+          pattern: "[a-z]{4,8}",
         })}
       />
       <input
@@ -24,10 +24,11 @@ export function FormWithBrowserMessages() {
         {...getFieldProps<FormValues>(formRef, {
           name: "password",
           minLength: 6,
-          maxLength: 10,
+          maxLength: 9,
         })}
       />
       <input
+        type="number"
         data-testid="age"
         {...getFieldProps<FormValues>(formRef, {
           name: "age",
@@ -43,6 +44,7 @@ export function FormWithBrowserMessages() {
           required: true,
         })}
       >
+        <option value=""></option>
         <option value="blue"></option>
         <option value="red"></option>
       </select>
