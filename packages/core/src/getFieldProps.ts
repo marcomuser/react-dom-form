@@ -1,6 +1,6 @@
 import type { ChangeEvent, RefCallback, RefObject } from "react";
 import type { AnyRecord, PathsFromObject } from "./types.js";
-import type { UnknownRecord } from "type-fest";
+import type { Entries, UnknownRecord } from "type-fest";
 
 type ValidationRule<Value extends boolean | number | string | RegExp> =
   | Value
@@ -9,7 +9,7 @@ type ValidationRule<Value extends boolean | number | string | RegExp> =
       message: string;
     };
 
-interface Constraints {
+interface ConstraintOptions {
   required?: ValidationRule<boolean> | undefined;
   min?: ValidationRule<string | number> | undefined;
   max?: ValidationRule<string | number> | undefined;
@@ -19,17 +19,7 @@ interface Constraints {
   pattern?: ValidationRule<string> | undefined;
 }
 
-export interface FieldOptions<FormValues extends UnknownRecord | undefined>
-  extends Constraints {
-  name: PathsFromObject<FormValues>;
-  onChange?: (event: ChangeEvent<any>) => void;
-  ref?: RefObject<unknown>;
-}
-
-export interface FieldProps {
-  name: string;
-  onChange: (event: ChangeEvent<any>) => void;
-  ref: RefCallback<unknown>;
+interface ConstraintProps {
   required?: boolean | undefined;
   min?: string | number | undefined;
   max?: string | number | undefined;
@@ -37,6 +27,19 @@ export interface FieldProps {
   minLength?: number | undefined;
   maxLength?: number | undefined;
   pattern?: string | undefined;
+}
+
+export interface FieldOptions<FormValues extends UnknownRecord | undefined>
+  extends ConstraintOptions {
+  name: PathsFromObject<FormValues>;
+  onChange?: (event: ChangeEvent<any>) => void;
+  ref?: RefObject<unknown>;
+}
+
+export interface FieldProps extends ConstraintProps {
+  name: string;
+  onChange: (event: ChangeEvent<any>) => void;
+  ref: RefCallback<unknown>;
 }
 
 export function getFieldProps<
@@ -55,16 +58,18 @@ export function getFieldProps<
   };
 }
 
-function getConstraints(constraints: Constraints) {
+function getConstraints(constraints: ConstraintOptions) {
   return Object.fromEntries(
-    Object.entries(constraints).map(([key, rule]) => [
-      key,
-      hasValidationMessage(rule) ? rule.value : rule,
-    ]),
+    (Object.entries(constraints) as Entries<ConstraintOptions>).map(
+      ([key, rule]) => [key, hasValidationMessage(rule) ? rule.value : rule],
+    ),
   );
 }
 
-function getRefCallback(constraints: Constraints, ref?: RefObject<unknown>) {
+function getRefCallback(
+  constraints: ConstraintOptions,
+  ref?: RefObject<unknown>,
+) {
   return (node: HTMLInputElement) => {
     if (node && hasValidationMessage(constraints.required)) {
       if (node.validity.valueMissing) {
@@ -81,7 +86,7 @@ function getRefCallback(constraints: Constraints, ref?: RefObject<unknown>) {
 }
 
 function getChangeHandler(
-  constraints: Constraints,
+  constraints: ConstraintOptions,
   onChange?: (event: ChangeEvent<any>) => void,
 ) {
   return (
