@@ -16,7 +16,7 @@ export interface Constraints {
   step?: ValidationRule<string | number> | undefined;
   minLength?: ValidationRule<number> | undefined;
   maxLength?: ValidationRule<number> | undefined;
-  pattern?: ValidationRule<RegExp> | undefined;
+  pattern?: ValidationRule<string> | undefined;
 }
 
 export interface FieldOptions<FormValues extends UnknownRecord | undefined>
