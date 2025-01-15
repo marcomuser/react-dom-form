@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
 import { userEvent } from "@vitest/browser/context";
 import { FormWithBrowserMessages } from "./fixtures/FormWithBrowserMessages.js";
+import { FormWithCustomMessages } from "./fixtures/FormWithCustomMessages.js";
 
 describe("getFieldProps with browser messages", () => {
   it("should render the inputs with constraint attributes", async () => {
@@ -85,74 +86,89 @@ describe("getFieldProps with browser messages", () => {
 
   it("should constraint required select", async () => {
     const screen = render(<FormWithBrowserMessages />);
-    const colorSelect = screen
-      .getByTestId("color")
-      .element() as HTMLSelectElement;
+    const color = screen.getByTestId("color").element() as HTMLSelectElement;
 
-    expect(colorSelect.validity.valid).toBe(false);
-    expect(colorSelect.validity.valueMissing).toBe(true);
-    expect(colorSelect.validationMessage).toBeTruthy();
+    expect(color.validity.valid).toBe(false);
+    expect(color.validity.valueMissing).toBe(true);
+    expect(color.validationMessage).toBeTruthy();
 
-    await userEvent.selectOptions(colorSelect, "blue");
-    expect(colorSelect.validity.valid).toBe(true);
-    expect(colorSelect.validity.valueMissing).toBe(false);
-    expect(colorSelect.validationMessage).toBe("");
+    await userEvent.selectOptions(color, "blue");
+    expect(color.validity.valid).toBe(true);
+    expect(color.validity.valueMissing).toBe(false);
+    expect(color.validationMessage).toBe("");
   });
 });
 
-// describe.skip("getFieldProps with custom error messages", () => {
-//   it("should set validationMessage after user input when constraint is violated", async () => {
-//     const screen = render(
-//       <Form minLength={{ value: 6, message: "Minimum 6 characters" }} />,
-//     );
+describe("getFieldProps with custom error messages", () => {
+  it("should constraint username with pattern", async () => {
+    const screen = render(<FormWithCustomMessages />);
+    const username = screen
+      .getByTestId("username")
+      .element() as HTMLInputElement;
 
-//     const password = screen
-//       .getByLabelText("password")
-//       .element() as HTMLInputElement;
+    await userEvent.fill(username, "aa");
+    expect(username.validity.valid).toBe(false);
+    expect(username.validity.patternMismatch).toBe(true);
+    expect(username.validationMessage).toBe("pattern error");
 
-//     expect(password.validity.valid).toBe(true);
-//     expect(password.validationMessage).toBe("");
+    await userEvent.fill(username, "valid");
+    expect(username.validity.valid).toBe(true);
+    expect(username.validity.patternMismatch).toBe(false);
+    expect(username.validationMessage).toBe("");
+  });
 
-//     await userEvent.type(password, "12345");
-//     expect(password.validity.valid).toBe(false);
-//     expect(password.validity.tooShort).toBe(true);
-//     expect(password.validationMessage).toBe("Minimum 6 characters");
-//   });
+  it("should constraint password length", async () => {
+    const screen = render(<FormWithCustomMessages />);
+    const password = screen
+      .getByTestId("password")
+      .element() as HTMLInputElement;
 
-//   it("should reset validationMessage when input becomes valid", async () => {
-//     const screen = render(
-//       <Form minLength={{ value: 6, message: "Minimum 6 characters" }} />,
-//     );
+    await userEvent.fill(password, "short");
+    expect(password.validity.valid).toBe(false);
+    expect(password.validity.tooShort).toBe(true);
+    expect(password.validationMessage).toBe("minLength error");
 
-//     const password = screen
-//       .getByLabelText("password")
-//       .element() as HTMLInputElement;
+    await userEvent.fill(password, "validpass");
+    expect(password.validity.valid).toBe(true);
+    expect(password.validity.tooShort).toBe(false);
+    expect(password.validationMessage).toBe("");
+  });
 
-//     await userEvent.type(password, "12345");
-//     expect(password.validity.valid).toBe(false);
-//     expect(password.validity.tooShort).toBe(true);
-//     expect(password.validationMessage).toBe("Minimum 6 characters");
+  it("should constraint age range and step", async () => {
+    const screen = render(<FormWithCustomMessages />);
+    const age = screen.getByTestId("age").element() as HTMLInputElement;
 
-//     await userEvent.type(password, "6");
-//     expect(password.value).toBe("123456");
-//     expect(password.validity.valid).toBe(true);
-//     expect(password.validationMessage).toBe("");
-//   });
+    await userEvent.fill(age, "-1");
+    expect(age.validity.valid).toBe(false);
+    expect(age.validity.rangeUnderflow).toBe(true);
+    expect(age.validationMessage).toBe("min error");
 
-//   it("should set required validity already on first render", async () => {
-//     const screen = render(
-//       <Form required={{ value: true, message: "Required very much indeed" }} />,
-//     );
+    await userEvent.fill(age, "121");
+    expect(age.validity.valid).toBe(false);
+    expect(age.validity.rangeOverflow).toBe(true);
+    expect(age.validationMessage).toBe("max error");
 
-//     const email = screen.getByLabelText("email").element() as HTMLInputElement;
+    await userEvent.fill(age, "2.5");
+    expect(age.validity.valid).toBe(false);
+    expect(age.validity.stepMismatch).toBe(true);
+    expect(age.validationMessage).toBe("step error");
 
-//     expect(email.validity.valid).toBe(false);
-//     expect(email.validity.valueMissing).toBe(true);
-//     expect(email.validationMessage).toBe("Required very much indeed");
+    await userEvent.fill(age, "50");
+    expect(age.validity.valid).toBe(true);
+    expect(age.validationMessage).toBe("");
+  });
 
-//     await userEvent.type(email, "test@test.com");
-//     expect(email.validity.valid).toBe(true);
-//     expect(email.validity.valueMissing).toBe(false);
-//     expect(email.validationMessage).toBe("");
-//   });
-// });
+  it("should constraint required select", async () => {
+    const screen = render(<FormWithCustomMessages />);
+    const color = screen.getByTestId("color").element() as HTMLSelectElement;
+
+    expect(color.validity.valid).toBe(false);
+    expect(color.validity.valueMissing).toBe(true);
+    expect(color.validationMessage).toBe("required error");
+
+    await userEvent.selectOptions(color, "blue");
+    expect(color.validity.valid).toBe(true);
+    expect(color.validity.valueMissing).toBe(false);
+    expect(color.validationMessage).toBe("");
+  });
+});

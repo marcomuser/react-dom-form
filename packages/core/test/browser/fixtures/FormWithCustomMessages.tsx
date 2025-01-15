@@ -11,38 +11,40 @@ interface FormValues {
 export function FormWithCustomMessages() {
   const formRef = useRef<HTMLFormElement>(null);
   return (
-    <form>
+    <form ref={formRef}>
       <input
         data-testid="username"
         {...getFieldProps<FormValues>(formRef, {
           name: "username",
-          pattern: "w{3,16}",
+          pattern: { value: "[a-z]{4,8}", message: "pattern error" },
         })}
       />
       <input
         data-testid="password"
         {...getFieldProps<FormValues>(formRef, {
           name: "password",
-          minLength: 6,
-          maxLength: 10,
+          minLength: { value: 6, message: "minLength error" },
+          maxLength: { value: 9, message: "maxLength error" },
         })}
       />
       <input
+        type="number"
         data-testid="age"
         {...getFieldProps<FormValues>(formRef, {
           name: "age",
-          min: 0,
-          max: 120,
-          step: 1,
+          min: { value: 0, message: "min error" },
+          max: { value: 120, message: "max error" },
+          step: { value: 1, message: "step error" },
         })}
       />
       <select
         data-testid="color"
         {...getFieldProps<FormValues>(formRef, {
           name: "color",
-          required: true,
+          required: { value: true, message: "required error" },
         })}
       >
+        <option value=""></option>
         <option value="blue"></option>
         <option value="red"></option>
       </select>
