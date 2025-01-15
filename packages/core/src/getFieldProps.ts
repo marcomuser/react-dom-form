@@ -9,7 +9,7 @@ type ValidationRule<Value extends boolean | number | string | RegExp> =
       message: string;
     };
 
-export interface Constraints {
+interface Constraints {
   required?: ValidationRule<boolean> | undefined;
   min?: ValidationRule<string | number> | undefined;
   max?: ValidationRule<string | number> | undefined;
@@ -49,77 +49,92 @@ export function getFieldProps<
 
   return {
     name,
-    ...Object.fromEntries(
-      Object.entries(constraints).map(([key, rule]) => [
-        key,
-        hasValidationMessage(rule) ? rule.value : rule,
-      ]),
-    ),
-    ref: (node: HTMLInputElement) => {
-      if (node && hasValidationMessage(constraints.required)) {
-        if (node.validity.valueMissing) {
-          node.setCustomValidity(constraints.required.message);
-        } else {
-          node.setCustomValidity("");
+    ...getConstraints(constraints),
+    ref: getRefCallback(constraints, ref),
+    onChange: getChangeHandler(constraints, onChange),
+  };
+}
+
+function getConstraints(constraints: Constraints) {
+  return Object.fromEntries(
+    Object.entries(constraints).map(([key, rule]) => [
+      key,
+      hasValidationMessage(rule) ? rule.value : rule,
+    ]),
+  );
+}
+
+function getRefCallback(constraints: Constraints, ref?: RefObject<unknown>) {
+  return (node: HTMLInputElement) => {
+    if (node && hasValidationMessage(constraints.required)) {
+      if (node.validity.valueMissing) {
+        node.setCustomValidity(constraints.required.message);
+      } else {
+        node.setCustomValidity("");
+      }
+    }
+
+    if (ref?.current) {
+      ref.current = node;
+    }
+  };
+}
+
+function getChangeHandler(
+  constraints: Constraints,
+  onChange?: (event: ChangeEvent<any>) => void,
+) {
+  return (
+    event: ChangeEvent<{
+      validity: ValidityState;
+      setCustomValidity(error: string): void;
+    }>,
+  ) => {
+    Object.entries(constraints).forEach(([key, rule]) => {
+      if (hasValidationMessage(rule)) {
+        switch (key) {
+          case "required":
+            event.target.setCustomValidity(
+              event.target.validity.valueMissing ? rule.message : "",
+            );
+            break;
+          case "min":
+            event.target.setCustomValidity(
+              event.target.validity.rangeUnderflow ? rule.message : "",
+            );
+            break;
+          case "max":
+            event.target.setCustomValidity(
+              event.target.validity.rangeOverflow ? rule.message : "",
+            );
+            break;
+          case "step":
+            event.target.setCustomValidity(
+              event.target.validity.stepMismatch ? rule.message : "",
+            );
+            break;
+          case "minLength":
+            event.target.setCustomValidity(
+              event.target.validity.tooShort ? rule.message : "",
+            );
+            break;
+          case "maxLength":
+            event.target.setCustomValidity(
+              event.target.validity.tooLong ? rule.message : "",
+            );
+            break;
+          case "pattern":
+            event.target.setCustomValidity(
+              event.target.validity.patternMismatch ? rule.message : "",
+            );
+            break;
         }
       }
+    });
 
-      if (ref?.current) {
-        ref.current = node;
-      }
-    },
-    onChange: (
-      event: ChangeEvent<{
-        validity: ValidityState;
-        setCustomValidity(error: string): void;
-      }>,
-    ) => {
-      Object.entries(constraints).forEach(([key, rule]) => {
-        if (hasValidationMessage(rule)) {
-          switch (key) {
-            case "required":
-              event.target.setCustomValidity(
-                event.target.validity.valueMissing ? rule.message : "",
-              );
-              break;
-            case "min":
-              event.target.setCustomValidity(
-                event.target.validity.rangeUnderflow ? rule.message : "",
-              );
-              break;
-            case "max":
-              event.target.setCustomValidity(
-                event.target.validity.rangeOverflow ? rule.message : "",
-              );
-              break;
-            case "step":
-              event.target.setCustomValidity(
-                event.target.validity.stepMismatch ? rule.message : "",
-              );
-              break;
-            case "minLength":
-              event.target.setCustomValidity(
-                event.target.validity.tooShort ? rule.message : "",
-              );
-              break;
-            case "maxLength":
-              event.target.setCustomValidity(
-                event.target.validity.tooLong ? rule.message : "",
-              );
-              break;
-            case "pattern":
-              event.target.setCustomValidity(
-                event.target.validity.patternMismatch ? rule.message : "",
-              );
-              break;
-          }
-        }
-      });
-
-      if (onChange) {
-        onChange(event);
-      }
-    },
+    if (onChange) {
+      onChange(event);
+    }
   };
 }
 
