@@ -2,7 +2,7 @@ import type { ChangeEvent, RefCallback, RefObject } from "react";
 import type { AnyRecord, PathsFromObject } from "./types.js";
 import type { Entries, UnknownRecord } from "type-fest";
 
-type ValidationRule<Value extends boolean | number | string | RegExp> =
+type ValidationRule<Value extends boolean | number | string> =
   | Value
   | {
       value: Value;
@@ -143,7 +143,7 @@ function getChangeHandler(
   };
 }
 
-function hasValidationMessage<Value extends boolean | number | string | RegExp>(
+function hasValidationMessage<Value extends boolean | number | string>(
   rule: ValidationRule<Value> | undefined,
 ): rule is { value: Value; message: string } {
   return typeof rule === "object" && rule !== null && "message" in rule;
