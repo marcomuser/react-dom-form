@@ -104,42 +104,44 @@ function getChangeHandler(
       setCustomValidity(error: string): void;
     }>,
   ) => {
+    const { target } = event;
+
     Object.entries(constraints).forEach(([key, rule]) => {
       if (hasValidationMessage(rule)) {
         switch (key) {
           case "required":
-            event.target.setCustomValidity(
-              event.target.validity.valueMissing ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.valueMissing ? rule.message : "",
             );
             break;
           case "min":
-            event.target.setCustomValidity(
-              event.target.validity.rangeUnderflow ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.rangeUnderflow ? rule.message : "",
             );
             break;
           case "max":
-            event.target.setCustomValidity(
-              event.target.validity.rangeOverflow ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.rangeOverflow ? rule.message : "",
             );
             break;
           case "step":
-            event.target.setCustomValidity(
-              event.target.validity.stepMismatch ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.stepMismatch ? rule.message : "",
             );
             break;
           case "minLength":
-            event.target.setCustomValidity(
-              event.target.validity.tooShort ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.tooShort ? rule.message : "",
             );
             break;
           case "maxLength":
-            event.target.setCustomValidity(
-              event.target.validity.tooLong ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.tooLong ? rule.message : "",
             );
             break;
           case "pattern":
-            event.target.setCustomValidity(
-              event.target.validity.patternMismatch ? rule.message : "",
+            target.setCustomValidity(
+              target.validity.patternMismatch ? rule.message : "",
             );
             break;
         }
