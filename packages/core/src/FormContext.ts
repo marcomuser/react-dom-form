@@ -6,8 +6,8 @@ export interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
   SubmitError extends UnknownRecord | undefined,
 > {
-  defaultValues?: DefaultValues;
-  submitError?: SubmitError;
+  defaultValues?: DefaultValues | undefined;
+  submitError?: SubmitError | undefined;
   formRef: RefObject<HTMLFormElement | null>;
   getFieldProps: (options: FieldOptions<DefaultValues>) => FieldProps;
 }

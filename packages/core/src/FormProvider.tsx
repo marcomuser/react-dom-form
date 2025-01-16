@@ -1,9 +1,12 @@
-import { type JSX, type PropsWithChildren, type RefObject } from "react";
+import { type JSX, type ReactNode, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
 import { getFieldProps } from "./getFieldProps.js";
-import { FormContext } from "./FormContext.js";
+import { FormContext, type FormContextValue } from "./FormContext.js";
 
-export interface FormProviderProps {
+export interface FormProviderProps<
+  DefaultValues extends UnknownRecord | undefined,
+  SubmitError extends UnknownRecord | undefined,
+> {
   /**
    * Default values for the form. This is typically used in conjunction with
    * `useActionState` to display initial values.
@@ -22,7 +25,7 @@ export interface FormProviderProps {
    * return <FormProvider defaultValues={formState.defaultValues}>...</FormProvider>;
    * ```
    */
-  defaultValues?: UnknownRecord | undefined;
+  defaultValues?: DefaultValues;
   /**
    * Error object returned from a form submission. This is meant to be used with
    * `useActionState` to display submit errors to the user.
@@ -44,7 +47,7 @@ export interface FormProviderProps {
    * return <FormProvider submitError={formState.submitError}>...</FormProvider>;
    * ```
    */
-  submitError?: UnknownRecord | undefined;
+  submitError?: SubmitError;
   /**
    * A ref to the HTML form element. This is required for accessing the form
    * element directly, for example, to trigger form validation.
@@ -63,12 +66,25 @@ export interface FormProviderProps {
   ref: RefObject<HTMLFormElement | null>;
 }
 
-export function FormProvider({
+interface ChildrenProp<
+  DefaultValues extends UnknownRecord | undefined,
+  SubmitError extends UnknownRecord | undefined,
+> {
+  children:
+    | ReactNode
+    | ((props: FormContextValue<DefaultValues, SubmitError>) => ReactNode);
+}
+
+export function FormProvider<
+  DefaultValues extends UnknownRecord | undefined,
+  SubmitError extends UnknownRecord | undefined,
+>({
   defaultValues,
   submitError,
   ref,
   children,
-}: PropsWithChildren<FormProviderProps>): JSX.Element {
+}: FormProviderProps<DefaultValues, SubmitError> &
+  ChildrenProp<DefaultValues, SubmitError>): JSX.Element {
   return (
     <FormContext
       value={{
@@ -78,7 +94,14 @@ export function FormProvider({
         getFieldProps: (options) => getFieldProps(ref, options),
       }}
     >
-      {children}
+      {typeof children === "function"
+        ? children({
+            defaultValues,
+            submitError,
+            formRef: ref,
+            getFieldProps: (options) => getFieldProps(ref, options),
+          })
+        : children}
     </FormContext>
   );
 }
