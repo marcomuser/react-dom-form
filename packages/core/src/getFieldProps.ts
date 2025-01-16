@@ -52,27 +52,23 @@ export function getFieldProps<
 
   return {
     name,
-    ...getConstraints(constraints),
+    ...getConstraintProps(constraints),
     ref: getRefCallback(constraints, ref),
     onChange: getChangeHandler(constraints, onChange),
   };
 }
 
-function getConstraints(constraints: ConstraintOptions) {
-  return Object.fromEntries(
-    (Object.entries(constraints) as Entries<ConstraintOptions>).map(
-      ([key, rule]) => {
-        if (hasValidationMessage(rule)) {
-          return [
-            key,
-            rule.value instanceof RegExp ? rule.value.source : rule.value,
-          ];
-        } else {
-          return [key, rule instanceof RegExp ? rule.source : rule];
-        }
-      },
-    ),
-  );
+function getConstraintProps(constraints: ConstraintOptions): ConstraintProps {
+  const props: Record<PropertyKey, string | number | boolean | undefined> = {};
+
+  for (const [key, rule] of Object.entries(
+    constraints,
+  ) as Entries<ConstraintOptions>) {
+    const value = hasValidationMessage(rule) ? rule.value : rule;
+    props[key] = value instanceof RegExp ? value.source : value;
+  }
+
+  return props;
 }
 
 function getRefCallback(
