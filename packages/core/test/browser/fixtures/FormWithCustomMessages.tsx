@@ -16,7 +16,7 @@ export function FormWithCustomMessages() {
         data-testid="username"
         {...getFieldProps<FormValues>(formRef, {
           name: "username",
-          pattern: { value: "[a-z]{4,8}", message: "pattern error" },
+          pattern: { value: RegExp("[a-z]{4,8}"), message: "pattern error" },
         })}
       />
       <input

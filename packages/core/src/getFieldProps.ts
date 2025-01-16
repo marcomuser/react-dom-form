@@ -2,7 +2,7 @@ import type { ChangeEvent, RefCallback, RefObject } from "react";
 import type { AnyRecord, PathsFromObject } from "./types.js";
 import type { Entries, UnknownRecord } from "type-fest";
 
-type ValidationRule<Value extends boolean | number | string> =
+type ValidationRule<Value extends boolean | number | RegExp> =
   | Value
   | {
       value: Value;
@@ -11,12 +11,12 @@ type ValidationRule<Value extends boolean | number | string> =
 
 interface ConstraintOptions {
   required?: ValidationRule<boolean> | undefined;
-  min?: ValidationRule<string | number> | undefined;
-  max?: ValidationRule<string | number> | undefined;
-  step?: ValidationRule<string | number> | undefined;
+  min?: ValidationRule<number> | undefined;
+  max?: ValidationRule<number> | undefined;
+  step?: ValidationRule<number> | undefined;
   minLength?: ValidationRule<number> | undefined;
   maxLength?: ValidationRule<number> | undefined;
-  pattern?: ValidationRule<string> | undefined;
+  pattern?: ValidationRule<RegExp> | undefined;
 }
 
 interface ConstraintProps {
@@ -61,7 +61,16 @@ export function getFieldProps<
 function getConstraints(constraints: ConstraintOptions) {
   return Object.fromEntries(
     (Object.entries(constraints) as Entries<ConstraintOptions>).map(
-      ([key, rule]) => [key, hasValidationMessage(rule) ? rule.value : rule],
+      ([key, rule]) => {
+        if (hasValidationMessage(rule)) {
+          return [
+            key,
+            rule.value instanceof RegExp ? rule.value.source : rule.value,
+          ];
+        } else {
+          return [key, rule instanceof RegExp ? rule.source : rule];
+        }
+      },
     ),
   );
 }
@@ -143,7 +152,7 @@ function getChangeHandler(
   };
 }
 
-function hasValidationMessage<Value extends boolean | number | string>(
+function hasValidationMessage<Value extends boolean | number | RegExp>(
   rule: ValidationRule<Value> | undefined,
 ): rule is { value: Value; message: string } {
   return typeof rule === "object" && rule !== null && "message" in rule;

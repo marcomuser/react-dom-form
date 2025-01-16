@@ -16,7 +16,7 @@ export function FormWithBrowserMessages() {
         data-testid="username"
         {...getFieldProps<FormValues>(formRef, {
           name: "username",
-          pattern: "[a-z]{4,8}",
+          pattern: RegExp("[a-z]{4,8}"),
         })}
       />
       <input
