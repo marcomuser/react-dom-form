@@ -5,6 +5,9 @@ import type { AnyRecord, ParsedValue } from "./types.js";
 /**
  * Parses a `FormData` object into a structured object with typed values.
  *
+ * @param formData A `FormData` object.
+ * @returns An object representing the form data, with types derived from the `FormValues` generic.
+ *
  * @example
  * ```ts
  * const formData = new FormData();
@@ -16,9 +19,6 @@ import type { AnyRecord, ParsedValue } from "./types.js";
  * parse<{ name: string; age: string; hobbies: string[] }>(formData);
  * // Returns { name: 'John Doe', age: '30', hobbies: ['Music', 'Coding'] }
  * ```
- *
- * @param formData A `FormData` object.
- * @returns An object representing the form data, with types derived from the `FormValues` generic.
  */
 export function parse<FormValues extends AnyRecord = UnknownRecord>(
   formData: FormData,

@@ -1,6 +1,25 @@
 import type { UnknownRecord } from "type-fest";
 import type { SerializedValue } from "./types.js";
 
+/**
+ * Serializes a value for use in the `defaultValue` attribute of input elements.
+ * This function handles the necessary transformation whenever possible. Otherwise, it will return the value as is.
+ *
+ * Note: Values within the form context's `defaultValues` object are automatically serialized.
+ * Avoid redundant serialization of these values.
+ *
+ * @param value The value to serialize.
+ * @returns The serialized value.
+ *
+ * @example
+ * ```ts
+ * serialize(123); // Returns "123"
+ * serialize(true); // Returns true
+ * serialize(new Date()) // Returns "2025-01-17T17:04:25.059Z"
+ * serialize(null); // Returns undefined
+ * serialize({username: "test", age: 100}) // Returns {username: "test", age: "100"}
+ * ```
+ */
 export function serialize<T>(value: T): SerializedValue<T> {
   if (value === null) {
     return undefined as SerializedValue<T>;

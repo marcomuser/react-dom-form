@@ -12,14 +12,14 @@ import type { AnyRecord, GetFromObject, PathsFromObject } from "./types.js";
 /**
  * Get a value by object path. `undefined` if key is missing.
  *
+ * @param obj Any object.
+ * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
+ * @returns The value for this path. Undefined if key is missing.
+ *
  * @example
  * ```ts
  * getPath({ a: { b: { c: ['hey', 'Hi!'] } } }, 'a.b.c[1]') // Returns 'Hi!'
  * ```
- *
- * @param obj Any object.
- * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
- * @returns The value for this path. Undefined if key is missing.
  */
 export function getPath<T extends AnyRecord, K extends PathsFromObject<T>>(
   obj: T,
@@ -42,15 +42,15 @@ export function getPath<T extends AnyRecord, K extends PathsFromObject<T>>(
  * -- some sub-objects may still be shared between the old value and the new
  * one). Sparse arrays will be created if you set arbitrary length.
  *
+ * @param obj Any object.
+ * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
+ * @returns The new object.
+ *
  * @example
  * ```ts
  * setPath({ a: { b: { c: [] } } }, 'a.b.c[1]', 'hey')
  * // Returns { a: { b: { c: [<empty>, 'hey'] } } }
  * ```
- *
- * @param obj Any object.
- * @param path Path splitted by dots and `[]`. Like: `props.arr[1].nested`.
- * @returns The new object.
  */
 export function setPath<TObj extends UnknownRecord, TPath extends string, TVal>(
   obj: TObj,
