@@ -1,6 +1,6 @@
 import type { ChangeEvent, RefCallback, RefObject } from "react";
-import type { AnyRecord, PathsFromObject } from "./types.js";
-import type { Entries, UnknownRecord } from "type-fest";
+import type { PathsFromObject } from "./types.js";
+import type { Entries } from "type-fest";
 
 type ValidationRule<Value extends boolean | number | RegExp> =
   | Value
@@ -10,27 +10,26 @@ type ValidationRule<Value extends boolean | number | RegExp> =
     };
 
 interface ConstraintOptions {
-  required?: ValidationRule<boolean> | undefined;
-  min?: ValidationRule<number> | undefined;
-  max?: ValidationRule<number> | undefined;
-  step?: ValidationRule<number> | undefined;
-  minLength?: ValidationRule<number> | undefined;
-  maxLength?: ValidationRule<number> | undefined;
-  pattern?: ValidationRule<RegExp> | undefined;
+  required?: ValidationRule<boolean>;
+  min?: ValidationRule<number>;
+  max?: ValidationRule<number>;
+  step?: ValidationRule<number>;
+  minLength?: ValidationRule<number>;
+  maxLength?: ValidationRule<number>;
+  pattern?: ValidationRule<RegExp>;
 }
 
 interface ConstraintProps {
-  required?: boolean | undefined;
-  min?: string | number | undefined;
-  max?: string | number | undefined;
-  step?: string | number | undefined;
-  minLength?: number | undefined;
-  maxLength?: number | undefined;
-  pattern?: string | undefined;
+  required?: boolean;
+  min?: string | number;
+  max?: string | number;
+  step?: string | number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
 }
 
-export interface FieldOptions<FormValues extends UnknownRecord | undefined>
-  extends ConstraintOptions {
+export interface FieldOptions<FormValues> extends ConstraintOptions {
   name: PathsFromObject<FormValues>;
   onChange?: (event: ChangeEvent<any>) => void;
   ref?: RefObject<unknown>;
@@ -42,9 +41,7 @@ export interface FieldProps extends ConstraintProps {
   ref: RefCallback<unknown>;
 }
 
-export function getFieldProps<
-  FormValues extends AnyRecord | undefined = UnknownRecord | undefined,
->(
+export function getFieldProps<FormValues>(
   formRef: RefObject<HTMLFormElement | null>,
   options: FieldOptions<FormValues>,
 ): FieldProps {
@@ -59,13 +56,15 @@ export function getFieldProps<
 }
 
 function getConstraintProps(constraints: ConstraintOptions): ConstraintProps {
-  const props: Record<PropertyKey, string | number | boolean | undefined> = {};
+  const props: Record<PropertyKey, string | number | boolean> = {};
 
   for (const [key, rule] of Object.entries(
     constraints,
   ) as Entries<ConstraintOptions>) {
     const value = hasValidationMessage(rule) ? rule.value : rule;
-    props[key] = value instanceof RegExp ? value.source : value;
+    if (value !== undefined) {
+      props[key] = value instanceof RegExp ? value.source : value;
+    }
   }
 
   return props;
