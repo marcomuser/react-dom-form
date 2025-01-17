@@ -1,13 +1,14 @@
 import { createContext, type Context, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
 import type { FieldProps, FieldOptions } from "./getFieldProps.js";
+import type { SerializedValue } from "./types.js";
 
 export interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
   SubmitError extends UnknownRecord | undefined,
 > {
   /**
-   * Default values for the form. This is typically used in conjunction with
+   * Serialized default values for the form. This is typically used in conjunction with
    * `useActionState` to display initial values.
    *
    * @example
@@ -24,7 +25,7 @@ export interface FormContextValue<
    * return <FormProvider defaultValues={formState.defaultValues}>...</FormProvider>;
    * ```
    */
-  defaultValues?: DefaultValues | undefined;
+  defaultValues?: SerializedValue<DefaultValues> | undefined;
   /**
    * Error object returned from a form submission. This is meant to be used with
    * `useActionState` to display submit errors to the user.

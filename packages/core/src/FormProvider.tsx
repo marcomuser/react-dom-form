@@ -3,6 +3,7 @@ import type { UnknownRecord } from "type-fest";
 import { getFieldProps } from "./getFieldProps.js";
 import { FormContext, type FormContextValue } from "./FormContext.js";
 import type { AnyRecord } from "./types.js";
+import { serialize } from "./serialize.js";
 
 interface FormProviderProps<
   DefaultValues extends UnknownRecord | undefined,
@@ -26,7 +27,7 @@ export function FormProvider<
   children,
 }: FormProviderProps<DefaultValues, SubmitError>): JSX.Element {
   const props: FormContextValue<DefaultValues, SubmitError> = {
-    defaultValues,
+    defaultValues: serialize(defaultValues),
     submitError,
     formRef: ref,
     getFieldProps: (options) => getFieldProps(ref, options),
