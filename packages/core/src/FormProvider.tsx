@@ -1,6 +1,6 @@
 import { type JSX, type ReactNode, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
-import { getFieldProps, type FieldOptions } from "./getFieldProps.js";
+import { getFieldProps } from "./getFieldProps.js";
 import { FormContext, type FormContextValue } from "./FormContext.js";
 
 interface FormProviderProps<
@@ -24,12 +24,11 @@ export function FormProvider<
   ref,
   children,
 }: FormProviderProps<DefaultValues, SubmitError>): JSX.Element {
-  const props = {
+  const props: FormContextValue<DefaultValues, SubmitError> = {
     defaultValues,
     submitError,
     formRef: ref,
-    getFieldProps: (options: FieldOptions<DefaultValues>) =>
-      getFieldProps(ref, options),
+    getFieldProps: (options) => getFieldProps(ref, options),
   };
 
   return (
