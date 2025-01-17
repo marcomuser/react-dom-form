@@ -2,6 +2,7 @@ import { type JSX, type ReactNode, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
 import { getFieldProps } from "./getFieldProps.js";
 import { FormContext, type FormContextValue } from "./FormContext.js";
+import type { AnyRecord } from "./types.js";
 
 interface FormProviderProps<
   DefaultValues extends UnknownRecord | undefined,
@@ -16,8 +17,8 @@ interface FormProviderProps<
 }
 
 export function FormProvider<
-  DefaultValues extends UnknownRecord | undefined,
-  SubmitError extends UnknownRecord | undefined,
+  DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
+  SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
 >({
   defaultValues,
   submitError,
