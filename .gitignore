@@ -26,3 +26,6 @@ npm-debug.log*
 
 # misc
 .DS_Store
+
+# local playground
+/playground
