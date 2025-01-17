@@ -1,7 +1,7 @@
 import { createContext, type Context, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
 import type { FieldProps, FieldOptions } from "./getFieldProps.js";
-import type { SerializedValue } from "./types.js";
+import type { FilterBrowserBuiltIns, SerializedValue } from "./types.js";
 
 export interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
@@ -64,7 +64,9 @@ export interface FormContextValue<
    * ```
    */
   formRef: RefObject<HTMLFormElement | null>;
-  getFieldProps: (options: FieldOptions<DefaultValues>) => FieldProps;
+  getFieldProps: (
+    options: FieldOptions<FilterBrowserBuiltIns<DefaultValues>>,
+  ) => FieldProps;
 }
 
 export const FormContext: Context<FormContextValue<
