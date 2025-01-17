@@ -49,7 +49,7 @@ describe("SerializedValue", () => {
     expectTypeOf<SerializedValue<File>>().toEqualTypeOf<File>();
   });
 
-  it("should handle complex nested structures", () => {
+  it("should handle complex nested types", () => {
     type Nested = {
       a: number;
       b: string[];
@@ -61,6 +61,32 @@ describe("SerializedValue", () => {
         }[];
       };
     };
+    type ExpectedNested = {
+      a: string;
+      b: string[];
+      c: {
+        d: string;
+        e: {
+          f: string;
+          g: undefined;
+        }[];
+      };
+    };
+    expectTypeOf<SerializedValue<Nested>>().toEqualTypeOf<ExpectedNested>();
+  });
+
+  it("should handle complex nested interfaces", () => {
+    interface Nested {
+      a: number;
+      b: string[];
+      c: {
+        d: Date;
+        e: {
+          f: bigint;
+          g: null;
+        }[];
+      };
+    }
     type ExpectedNested = {
       a: string;
       b: string[];

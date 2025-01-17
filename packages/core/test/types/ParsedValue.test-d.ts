@@ -66,7 +66,7 @@ describe("ParsedValue", () => {
     expectTypeOf<ParsedValue<TestSchema[]>>().toEqualTypeOf<ExpectedType>();
   });
 
-  it("should handle complex nested structure", () => {
+  it("should handle complex nested types", () => {
     type TestSchema = {
       name: string;
       tags: string[];
@@ -82,6 +82,42 @@ describe("ParsedValue", () => {
           | null;
       };
     };
+
+    type ExpectedType = {
+      name: string;
+      tags: string[];
+      details: {
+        address: {
+          street: string;
+          numbers: string[];
+        };
+        meta:
+          | {
+              active: string | undefined;
+            }[]
+          | undefined;
+      };
+    };
+
+    expectTypeOf<ParsedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
+  });
+
+  it("should handle complex nested interfaces", () => {
+    interface TestSchema {
+      name: string;
+      tags: string[];
+      details: {
+        address: {
+          street: string;
+          numbers: number[];
+        };
+        meta:
+          | {
+              active: boolean;
+            }[]
+          | null;
+      };
+    }
 
     type ExpectedType = {
       name: string;
