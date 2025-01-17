@@ -1,17 +1,17 @@
-import type { Get, Paths, UnknownRecord } from "type-fest";
+import type { Get, Paths } from "type-fest";
 
-export type ParsedValue<Value> = Value extends UnknownRecord
-  ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
-  : Value extends Array<infer Item>
-    ? Array<ParsedValue<Item>>
-    : Value extends number | Date | bigint
-      ? string
-      : Value extends boolean
-        ? string | undefined
-        : Value extends Blob
-          ? File
-          : Value extends null
-            ? undefined
+export type ParsedValue<Value> = Value extends Date | number | bigint | string
+  ? string
+  : Value extends boolean
+    ? string | undefined
+    : Value extends Blob
+      ? File
+      : Value extends null
+        ? undefined
+        : Value extends Array<infer Item>
+          ? Array<ParsedValue<Item>>
+          : Value extends AnyRecord
+            ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
             : Value;
 
 export type SerializedValue<Value> = Value extends Blob | FileList
