@@ -23,7 +23,7 @@ import type { AnyRecord, ParsedValue } from "./types.js";
 export function parse<FormValues extends AnyRecord = UnknownRecord>(
   formData: FormData,
 ): ParsedValue<FormValues> {
-  let formValues = {} as ParsedValue<FormValues>;
+  let formValues: AnyRecord = {};
   const keys = new Set(formData.keys());
 
   for (const key of keys) {
@@ -32,5 +32,5 @@ export function parse<FormValues extends AnyRecord = UnknownRecord>(
     formValues = setPath(formValues, key, val);
   }
 
-  return formValues;
+  return formValues as ParsedValue<FormValues>;
 }
