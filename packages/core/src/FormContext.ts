@@ -67,7 +67,7 @@ export interface FormContextValue<
 }
 
 export const FormContext: Context<FormContextValue<
-  UnknownRecord | undefined,
+  any,
   UnknownRecord | undefined
 > | null> = createContext<FormContextValue<
   UnknownRecord | undefined,
