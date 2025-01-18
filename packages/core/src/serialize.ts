@@ -2,7 +2,7 @@ import type { UnknownRecord } from "type-fest";
 import type { SerializedValue } from "./types.js";
 
 /**
- * Serializes a value for use in the `defaultValue` attribute of input elements.
+ * Serializes a value for use in the `defaultValue` or `defaultChecked` attribute of input elements.
  * This function handles the necessary transformation whenever possible. Otherwise, it will return the value as is.
  *
  * Note: Values within the form context's `defaultValues` object are automatically serialized.
