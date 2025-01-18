@@ -23,6 +23,7 @@ npm-debug.log*
 
 # test
 *.vitest-temp.json
+__screenshots__
 
 # misc
 .DS_Store

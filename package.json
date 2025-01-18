@@ -1,5 +1,6 @@
 {
   "name": "react-dom-form-monorepo",
+  "version": "0.0.0",
   "private": true,
   "description": "Composable react primitives for form-associated elements",
   "type": "module",
@@ -15,7 +16,7 @@
     "format:write": "prettier . --write",
     "lint": "npm run lint --workspaces --if-present",
     "prepare": "playwright install --with-deps chromium",
-    "test": "vitest run --browser.headless",
+    "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "npm run typecheck --workspaces --if-present"
   },
@@ -32,7 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "@types/react": "^19.0.7",
-    "@vitest/browser": "^2.1.8",
+    "@vitest/browser": "^3.0.2",
     "eslint": "^9.18.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "globals": "^15.14.0",
@@ -40,7 +41,7 @@
     "prettier": "^3.4.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0",
-    "vitest": "^2.1.8",
+    "vitest": "^3.0.2",
     "vitest-browser-react": "^0.0.4"
   }
 }

@@ -3,7 +3,10 @@ import { defineWorkspace } from "vitest/config";
 export default defineWorkspace([
   {
     test: {
-      include: ["packages/*/test/unit/*.test.{ts,tsx}"],
+      include: [
+        "packages/*/test/unit/*.test.{ts,tsx}",
+        "packages/*/test/types/*.test-d.{ts,tsx}",
+      ],
       name: "node",
       environment: "node",
       typecheck: {
@@ -19,7 +22,12 @@ export default defineWorkspace([
       browser: {
         enabled: true,
         provider: "playwright",
-        name: "chromium",
+        headless: true,
+        instances: [
+          {
+            browser: "chromium",
+          },
+        ],
       },
     },
   },
