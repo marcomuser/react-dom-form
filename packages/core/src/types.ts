@@ -26,7 +26,7 @@ export type SerializedValue<Value> = Value extends Blob | FileList
           ? { [Key in keyof Value]: SerializedValue<Value[Key]> }
           : Value;
 
-export type FilterBrowserBuiltIns<Value> = Value extends Blob | FileList | Date
+type FilterBrowserBuiltIns<Value> = Value extends Blob | FileList | Date
   ? never
   : Value extends Array<infer Item>
     ? Array<FilterBrowserBuiltIns<Item>>
@@ -35,7 +35,7 @@ export type FilterBrowserBuiltIns<Value> = Value extends Blob | FileList | Date
       : never;
 
 export type PathsFromObject<BaseType> = Paths<
-  BaseType,
+  FilterBrowserBuiltIns<BaseType>,
   { bracketNotation: true }
 >;
 
