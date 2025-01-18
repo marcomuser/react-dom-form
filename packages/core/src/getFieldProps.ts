@@ -29,6 +29,18 @@ interface ConstraintProps {
   pattern?: string;
 }
 
+const validityMap: Readonly<
+  Record<keyof ConstraintOptions, keyof ValidityState>
+> = {
+  required: "valueMissing",
+  minLength: "tooShort",
+  maxLength: "tooLong",
+  min: "rangeUnderflow",
+  max: "rangeOverflow",
+  step: "stepMismatch",
+  pattern: "patternMismatch",
+};
+
 export interface FieldOptions<FormValues> extends ConstraintOptions {
   name: PathsFromObject<FormValues>;
   onChange?: (event: ChangeEvent<any>) => void;
@@ -101,47 +113,15 @@ function getChangeHandler(
   ) => {
     const { target } = event;
 
-    Object.entries(constraints).forEach(([key, rule]) => {
-      if (hasValidationMessage(rule)) {
-        switch (key) {
-          case "required":
-            target.setCustomValidity(
-              target.validity.valueMissing ? rule.message : "",
-            );
-            break;
-          case "min":
-            target.setCustomValidity(
-              target.validity.rangeUnderflow ? rule.message : "",
-            );
-            break;
-          case "max":
-            target.setCustomValidity(
-              target.validity.rangeOverflow ? rule.message : "",
-            );
-            break;
-          case "step":
-            target.setCustomValidity(
-              target.validity.stepMismatch ? rule.message : "",
-            );
-            break;
-          case "minLength":
-            target.setCustomValidity(
-              target.validity.tooShort ? rule.message : "",
-            );
-            break;
-          case "maxLength":
-            target.setCustomValidity(
-              target.validity.tooLong ? rule.message : "",
-            );
-            break;
-          case "pattern":
-            target.setCustomValidity(
-              target.validity.patternMismatch ? rule.message : "",
-            );
-            break;
-        }
+    target.setCustomValidity("");
+
+    for (const [key, rule] of Object.entries(
+      constraints,
+    ) as Entries<ConstraintOptions>) {
+      if (hasValidationMessage(rule) && target.validity[validityMap[key]]) {
+        target.setCustomValidity(rule.message);
       }
-    });
+    }
 
     if (onChange) {
       onChange(event);
