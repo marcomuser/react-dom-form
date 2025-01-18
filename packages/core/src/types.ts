@@ -1,19 +1,41 @@
-import type { Get, Paths, UnknownRecord } from "type-fest";
+import type { Get, Paths } from "type-fest";
 
-export type StructuredFormValue<Schema> = Schema extends UnknownRecord
-  ? { [Key in keyof Schema]: StructuredFormValue<Schema[Key]> }
-  : Schema extends Array<infer Item>
-    ? Array<StructuredFormValue<Item>>
-    : Schema extends number | boolean | Date | bigint
-      ? string
-      : Schema extends Blob
-        ? File
-        : Schema extends null
-          ? undefined
-          : Schema;
+export type ParsedValue<Value> = Value extends Date | number | bigint | string
+  ? string
+  : Value extends boolean
+    ? string | undefined
+    : Value extends Blob
+      ? File
+      : Value extends null
+        ? undefined
+        : Value extends Array<infer Item>
+          ? Array<ParsedValue<Item>>
+          : Value extends AnyRecord
+            ? { [Key in keyof Value]: ParsedValue<Value[Key]> }
+            : Value;
+
+export type SerializedValue<Value> = Value extends Blob | FileList
+  ? Value
+  : Value extends Date | number | bigint | string
+    ? string
+    : Value extends null
+      ? undefined
+      : Value extends Array<infer Item>
+        ? Array<SerializedValue<Item>>
+        : Value extends AnyRecord
+          ? { [Key in keyof Value]: SerializedValue<Value[Key]> }
+          : Value;
+
+type FilterBrowserBuiltIns<Value> = Value extends Blob | FileList | Date
+  ? never
+  : Value extends Array<infer Item>
+    ? Array<FilterBrowserBuiltIns<Item>>
+    : Value extends AnyRecord
+      ? { [Key in keyof Value]: FilterBrowserBuiltIns<Value[Key]> }
+      : never;
 
 export type PathsFromObject<BaseType> = Paths<
-  BaseType,
+  FilterBrowserBuiltIns<BaseType>,
   { bracketNotation: true }
 >;
 

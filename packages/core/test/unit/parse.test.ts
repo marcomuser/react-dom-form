@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parse } from "../src/parse.js";
+import { parse } from "../../src/parse.js";
 
 describe("parse", () => {
   it("should handle simple key-value pairs", () => {

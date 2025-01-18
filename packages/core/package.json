@@ -6,8 +6,6 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint \"src/**\"",
-    "test": "vitest run",
-    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,

@@ -1,15 +1,7 @@
 import { use } from "react";
-import { FormContext, type FormProviderProps } from "./FormProvider.js";
 import type { UnknownRecord } from "type-fest";
 import type { AnyRecord } from "./types.js";
-
-interface FormContextValue<
-  DefaultValues extends UnknownRecord | undefined,
-  SubmitError extends UnknownRecord | undefined,
-> extends FormProviderProps {
-  defaultValues: DefaultValues;
-  submitError: SubmitError;
-}
+import { FormContext, type FormContextValue } from "./FormContext.js";
 
 /**
  * A custom hook to access the form context.
@@ -17,18 +9,13 @@ interface FormContextValue<
  * @example
  * ```tsx
  * interface FormValues {
- *   name: string;
  *   email: string;
+ *   password: string;
  * }
  *
- * interface SubmitError {
- *   errorMessage: string;
- * }
- *
- * function Fields() {
- *   const { defaultValues, submitError, formRef } = useFormContext<FormValues, SubmitError>();
- *
- *   return <input name="email" defaultValue={defaultValues?.email} />;
+ * function EmailInput() {
+ *   const { defaultValues, getFieldProps } = useFormContext<FormValues>();
+ *   return <input defaultValue={defaultValues?.email} {...getFieldProps({name: "email"})} />;
  * }
  */
 export function useFormContext<

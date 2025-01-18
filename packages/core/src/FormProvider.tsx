@@ -1,18 +1,16 @@
-import {
-  createContext,
-  type Context,
-  type JSX,
-  type PropsWithChildren,
-  type RefObject,
-} from "react";
+import { type JSX, type ReactNode, type RefObject } from "react";
 import type { UnknownRecord } from "type-fest";
+import { getFieldProps } from "./getFieldProps.js";
+import { FormContext, type FormContextValue } from "./FormContext.js";
+import type { AnyRecord } from "./types.js";
+import { serialize } from "./serialize.js";
 
-export const FormContext: Context<FormProviderProps | null> =
-  createContext<FormProviderProps | null>(null);
-
-export interface FormProviderProps {
+interface FormProviderProps<
+  DefaultValues extends UnknownRecord | undefined,
+  SubmitError extends UnknownRecord | undefined,
+> {
   /**
-   * Default values for the form. This is typically used in conjunction with
+   * Default values for the form. Values will be serialized internally. This is typically used in conjunction with
    * `useActionState` to display initial values.
    *
    * @example
@@ -29,7 +27,7 @@ export interface FormProviderProps {
    * return <FormProvider defaultValues={formState.defaultValues}>...</FormProvider>;
    * ```
    */
-  defaultValues?: UnknownRecord | undefined;
+  defaultValues?: DefaultValues;
   /**
    * Error object returned from a form submission. This is meant to be used with
    * `useActionState` to display submit errors to the user.
@@ -51,34 +49,48 @@ export interface FormProviderProps {
    * return <FormProvider submitError={formState.submitError}>...</FormProvider>;
    * ```
    */
-  submitError?: UnknownRecord | undefined;
+  submitError?: SubmitError;
   /**
    * A ref to the HTML form element. This is required for accessing the form
-   * element directly, for example, to trigger form validation.
+   * element directly, for example, to report form validity to the user.
    * This ref should be created using `useRef` in the parent component.
    *
    * @example
    * ```tsx
    * const formRef = useRef<HTMLFormElement>(null);
-   * <form ref={formRef}>
-   *   <FormProvider formRef={formRef}>
+   *
+   * <FormProvider ref={formRef}>
+   *   <form ref={formRef}>
    *     ...
-   *   </FormProvider>
-   * </form>
+   *   </form>
+   * </FormProvider>
    * ```
    */
-  formRef: RefObject<HTMLFormElement | null>;
+  ref: RefObject<HTMLFormElement | null>;
+  children:
+    | ReactNode
+    | ((props: FormContextValue<DefaultValues, SubmitError>) => ReactNode);
 }
 
-export function FormProvider({
+export function FormProvider<
+  DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
+  SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
+>({
   defaultValues,
   submitError,
-  formRef,
+  ref,
   children,
-}: PropsWithChildren<FormProviderProps>): JSX.Element {
+}: FormProviderProps<DefaultValues, SubmitError>): JSX.Element {
+  const props: FormContextValue<DefaultValues, SubmitError> = {
+    defaultValues: serialize(defaultValues),
+    submitError,
+    formRef: ref,
+    getFieldProps: (options) => getFieldProps(ref, options),
+  };
+
   return (
-    <FormContext value={{ defaultValues, submitError, formRef }}>
-      {children}
+    <FormContext value={props}>
+      {typeof children === "function" ? children(props) : children}
     </FormContext>
   );
 }
