@@ -1,6 +1,7 @@
 import { useActionState, useRef } from "react";
 import { parse } from "../../../src/parse.js";
 import { FormProvider } from "../../../src/FormProvider.js";
+import { useFormContext } from "../../../src/useFormContext.js";
 
 interface FormValues {
   name: string;
@@ -47,7 +48,7 @@ export function SignUpForm() {
       defaultValues={actionState.defaultValues}
       meta={actionState.meta}
     >
-      {({ getFieldProps, defaultValues, meta }) => (
+      {({ getFieldProps, defaultValues }) => (
         <form
           ref={formRef}
           action={formAction}
@@ -114,8 +115,7 @@ export function SignUpForm() {
             />
           </label>
 
-          {meta?.isSuccess && <div role="status">{meta?.successMessage}</div>}
-          {!meta?.isSuccess && <div role="alert">{meta?.errorMessage}</div>}
+          <SubmitMessage />
 
           <br />
           <button type="reset" disabled={isPending}>
@@ -127,5 +127,16 @@ export function SignUpForm() {
         </form>
       )}
     </FormProvider>
+  );
+}
+
+function SubmitMessage() {
+  const { meta } = useFormContext<FormValues, ActionState["meta"]>();
+
+  return (
+    <>
+      {meta?.isSuccess && <div role="status">{meta?.successMessage}</div>}
+      {!meta?.isSuccess && <div role="alert">{meta?.errorMessage}</div>}
+    </>
   );
 }
