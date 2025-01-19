@@ -7,7 +7,7 @@ import { serialize } from "./serialize.js";
 
 interface FormProviderProps<
   DefaultValues extends UnknownRecord | undefined,
-  SubmitError extends UnknownRecord | undefined,
+  Meta extends UnknownRecord | undefined,
 > {
   /**
    * Default values for the form. Values will be serialized internally. This is typically used in conjunction with
@@ -15,41 +15,40 @@ interface FormProviderProps<
    *
    * @example
    * ```tsx
-   * const [formState, submitAction] = useActionState(
+   * const [actionState, submitAction] = useActionState(
    *   async (prevState, formData) => {
    *     const formValues = parse(formData);
    *     // ... form submission logic
    *     return redirect("/success")
    *   },
-   *   { defaultValues, submitError: undefined }
+   *   { defaultValues, meta: {submitError: undefined} }
    * );
    *
-   * return <FormProvider defaultValues={formState.defaultValues}>...</FormProvider>;
+   * return <FormProvider defaultValues={actionState.defaultValues}>...</FormProvider>;
    * ```
    */
   defaultValues?: DefaultValues;
   /**
-   * Error object returned from a form submission. This is meant to be used with
-   * `useActionState` to display submit errors to the user.
+   * Meta data returned after form submission, intended for use with useActionState to manage and display submission feedback.
    *
    * @example
    * ```tsx
-   * const [formState, submitAction] = useActionState(
+   * const [actionState, submitAction] = useActionState(
    *   async (prevState, formData) => {
    *     const formValues = parse(formData);
    *     try {
    *       // ... form submission logic
    *     } catch (error) {
-   *       return { defaultValues: formValues, submitError: error.message };
+   *       return { defaultValues: formValues, meta: {submitError: error.message} };
    *     }
    *   },
-   *   { defaultValues, submitError: undefined }
+   *   { defaultValues, meta: {submitError: undefined} }
    * );
    *
-   * return <FormProvider submitError={formState.submitError}>...</FormProvider>;
+   * return <FormProvider meta={actionState.meta}>...</FormProvider>;
    * ```
    */
-  submitError?: SubmitError;
+  meta?: Meta;
   /**
    * A ref to the HTML form element. This is required for accessing the form
    * element directly, for example, to report form validity to the user.
@@ -69,21 +68,21 @@ interface FormProviderProps<
   ref: RefObject<HTMLFormElement | null>;
   children:
     | ReactNode
-    | ((props: FormContextValue<DefaultValues, SubmitError>) => ReactNode);
+    | ((props: FormContextValue<DefaultValues, Meta>) => ReactNode);
 }
 
 export function FormProvider<
   DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
-  SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
+  Meta extends AnyRecord | undefined = UnknownRecord | undefined,
 >({
   defaultValues,
-  submitError,
+  meta,
   ref,
   children,
-}: FormProviderProps<DefaultValues, SubmitError>): JSX.Element {
-  const props: FormContextValue<DefaultValues, SubmitError> = {
+}: FormProviderProps<DefaultValues, Meta>): JSX.Element {
+  const props: FormContextValue<DefaultValues, Meta> = {
     defaultValues: serialize(defaultValues),
-    submitError,
+    meta,
     formRef: ref,
     getFieldProps: (options) => getFieldProps(ref, options),
   };
