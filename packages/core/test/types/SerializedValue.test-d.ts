@@ -100,4 +100,15 @@ describe("SerializedValue", () => {
     };
     expectTypeOf<SerializedValue<Nested>>().toEqualTypeOf<ExpectedNested>();
   });
+
+  it("should handle string union types", () => {
+    type TestSchema = {
+      value: "birds" | "cats" | "dogs" | "other";
+    };
+    type ExpectedType = {
+      value: "birds" | "cats" | "dogs" | "other";
+    };
+
+    expectTypeOf<SerializedValue<TestSchema>>().toEqualTypeOf<ExpectedType>();
+  });
 });
