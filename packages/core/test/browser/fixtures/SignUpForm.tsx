@@ -12,7 +12,9 @@ interface FormValues {
 
 interface ActionState {
   defaultValues?: FormValues | undefined;
-  submitError?: { errorMessage?: string } | undefined;
+  meta?:
+    | { isSuccess: boolean; errorMessage?: string; successMessage?: string }
+    | undefined;
 }
 
 async function submit(
@@ -23,11 +25,14 @@ async function submit(
 
   // in practice would try some async logic here
   try {
-    return { defaultValues: formValues };
+    return {
+      defaultValues: formValues,
+      meta: { isSuccess: true, successMessage: "Submitted successfully" },
+    };
   } catch {
     return {
       defaultValues: formValues,
-      submitError: { errorMessage: "Something went wrong" },
+      meta: { isSuccess: false, errorMessage: "Something went wrong" },
     };
   }
 }
@@ -40,9 +45,9 @@ export function SignUpForm() {
     <FormProvider
       ref={formRef}
       defaultValues={actionState.defaultValues}
-      submitError={actionState.submitError}
+      meta={actionState.meta}
     >
-      {({ getFieldProps, defaultValues }) => (
+      {({ getFieldProps, defaultValues, meta }) => (
         <form
           ref={formRef}
           action={formAction}
@@ -79,7 +84,7 @@ export function SignUpForm() {
                 name: "color",
                 pattern: {
                   value: new RegExp("(green|blue|red|yellow)"),
-                  message: "This is not a color we like!",
+                  message: "This is not a color we like",
                 },
                 required: true,
               })}
@@ -94,7 +99,7 @@ export function SignUpForm() {
                 name: "comment",
                 minLength: {
                   value: 20,
-                  message: "We want to hear more!",
+                  message: "We want to hear more",
                 },
               })}
             />
@@ -108,6 +113,9 @@ export function SignUpForm() {
               {...getFieldProps({ name: "agreement", required: true })}
             />
           </label>
+
+          {meta?.isSuccess && <div role="status">{meta?.successMessage}</div>}
+          {!meta?.isSuccess && <div role="alert">{meta?.errorMessage}</div>}
 
           <br />
           <button type="reset" disabled={isPending}>
