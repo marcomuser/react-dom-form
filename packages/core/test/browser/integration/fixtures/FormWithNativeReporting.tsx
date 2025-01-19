@@ -5,7 +5,7 @@ import { useFormContext } from "../../../../src/useFormContext.js";
 
 interface FormValues {
   name: string;
-  animal: string;
+  animal: "birds" | "cats" | "dogs" | "other";
   color: string;
   comment?: string;
   agreement?: string;

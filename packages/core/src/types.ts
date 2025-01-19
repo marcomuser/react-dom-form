@@ -1,6 +1,6 @@
 import type { Get, Paths } from "type-fest";
 
-export type ParsedValue<Value> = Value extends Date | number | bigint | string
+export type ParsedValue<Value> = Value extends Date | number | bigint
   ? string
   : Value extends boolean
     ? string | undefined
@@ -16,7 +16,7 @@ export type ParsedValue<Value> = Value extends Date | number | bigint | string
 
 export type SerializedValue<Value> = Value extends Blob | FileList
   ? Value
-  : Value extends Date | number | bigint | string
+  : Value extends Date | number | bigint
     ? string
     : Value extends null
       ? undefined
