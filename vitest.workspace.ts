@@ -4,8 +4,8 @@ export default defineWorkspace([
   {
     test: {
       include: [
-        "packages/*/test/unit/*.test.{ts,tsx}",
-        "packages/*/test/types/*.test-d.{ts,tsx}",
+        "packages/*/test/unit/**/*.test.{ts,tsx}",
+        "packages/*/test/types/**/*.test-d.{ts,tsx}",
       ],
       name: "node",
       environment: "node",
@@ -17,7 +17,7 @@ export default defineWorkspace([
   },
   {
     test: {
-      include: ["packages/*/test/browser/*.test.{ts,tsx}"],
+      include: ["packages/*/test/browser/**/*.test.{ts,tsx}"],
       name: "browser",
       browser: {
         enabled: true,

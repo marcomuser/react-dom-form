@@ -5,16 +5,16 @@ import type { SerializedValue } from "./types.js";
 
 export interface FormContextValue<
   DefaultValues extends UnknownRecord | undefined,
-  SubmitError extends UnknownRecord | undefined,
+  Meta extends UnknownRecord | undefined,
 > {
   /**
    * Serialized default values for use in the `defaultValue` or `defaultChecked` attribute of input elements.
    */
   defaultValues?: SerializedValue<DefaultValues> | undefined;
   /**
-   * Error object returned from a form submission.
+   * Meta data returned after form submission, intended for use with useActionState to manage and display submission feedback.
    */
-  submitError?: SubmitError | undefined;
+  meta?: Meta | undefined;
   /**
    * A ref to the HTML form element.
    */

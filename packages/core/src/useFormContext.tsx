@@ -20,13 +20,13 @@ import { FormContext, type FormContextValue } from "./FormContext.js";
  */
 export function useFormContext<
   DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
-  SubmitError extends AnyRecord | undefined = UnknownRecord | undefined,
->(): FormContextValue<DefaultValues, SubmitError> {
+  Meta extends AnyRecord | undefined = UnknownRecord | undefined,
+>(): FormContextValue<DefaultValues, Meta> {
   const value = use(FormContext);
 
   if (value === null) {
     throw new Error("useFormContext must be used under FormProvider");
   }
 
-  return value as FormContextValue<DefaultValues, SubmitError>;
+  return value as FormContextValue<DefaultValues, Meta>;
 }
