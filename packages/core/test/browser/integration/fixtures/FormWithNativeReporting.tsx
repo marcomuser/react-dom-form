@@ -1,7 +1,7 @@
 import { useActionState, useRef } from "react";
-import { parse } from "../../../src/parse.js";
-import { FormProvider } from "../../../src/FormProvider.js";
-import { useFormContext } from "../../../src/useFormContext.js";
+import { parse } from "../../../../src/parse.js";
+import { FormProvider } from "../../../../src/FormProvider.js";
+import { useFormContext } from "../../../../src/useFormContext.js";
 
 interface FormValues {
   name: string;
@@ -38,7 +38,7 @@ async function submit(
   }
 }
 
-export function SignUpForm() {
+export function FormWithNativeReporting() {
   const formRef = useRef<HTMLFormElement>(null);
   const [actionState, formAction, isPending] = useActionState(submit, {});
 
@@ -117,7 +117,6 @@ export function SignUpForm() {
 
           <SubmitMessage />
 
-          <br />
           <button type="reset" disabled={isPending}>
             Reset
           </button>
