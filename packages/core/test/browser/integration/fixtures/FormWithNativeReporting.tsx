@@ -7,7 +7,7 @@ interface FormValues {
   name: string;
   animal: string;
   color: string;
-  comment: string;
+  comment?: string;
   agreement?: string;
 }
 
@@ -24,18 +24,21 @@ async function submit(
 ): Promise<ActionState> {
   const formValues = parse<FormValues>(formData);
 
-  // in practice would try some async logic here
-  try {
+  // arbitrary validation
+  if (formValues.name === "John Doe") {
     return {
       defaultValues: formValues,
-      meta: { isSuccess: true, successMessage: "Submitted successfully" },
-    };
-  } catch {
-    return {
-      defaultValues: formValues,
-      meta: { isSuccess: false, errorMessage: "Something went wrong" },
+      meta: {
+        isSuccess: false,
+        errorMessage: "John Doe is already registered",
+      },
     };
   }
+
+  return {
+    defaultValues: formValues,
+    meta: { isSuccess: true, successMessage: "Submitted successfully" },
+  };
 }
 
 export function FormWithNativeReporting() {
@@ -107,7 +110,7 @@ export function FormWithNativeReporting() {
           </label>
 
           <label>
-            Check me before submitting
+            Agreement
             <input
               type="checkbox"
               defaultChecked={Boolean(defaultValues?.agreement)}
@@ -134,8 +137,12 @@ function SubmitMessage() {
 
   return (
     <>
-      {meta?.isSuccess && <div role="status">{meta?.successMessage}</div>}
-      {!meta?.isSuccess && <div role="alert">{meta?.errorMessage}</div>}
+      {meta?.isSuccess === true && (
+        <div role="status">{meta?.successMessage}</div>
+      )}
+      {meta?.isSuccess === false && (
+        <div role="alert">{meta?.errorMessage}</div>
+      )}
     </>
   );
 }
