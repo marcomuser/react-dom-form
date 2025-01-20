@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
-import { FormWithNativeReporting } from "./fixtures/FormWithNativeReporting.js";
 import { userEvent } from "@vitest/browser/context";
+import { FormWithNativeReporting } from "../fixtures/FormWithNativeReporting.js";
 
 describe("UI integration tests with native validity reporting", () => {
   it("displays success message after successful submit", async () => {
