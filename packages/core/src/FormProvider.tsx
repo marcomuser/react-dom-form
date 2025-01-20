@@ -66,6 +66,10 @@ interface FormProviderProps<
    * ```
    */
   ref: RefObject<HTMLFormElement | null>;
+  /**
+   * Disables all associated form inputs when `true`, unless overridden by setting `disabled` in `getFieldProps`.
+   * This may be used with `isPending` from `useActionState` to disable inputs during a pending request.
+   */
   disabled?: boolean;
   children:
     | ReactNode
