@@ -66,6 +66,7 @@ interface FormProviderProps<
    * ```
    */
   ref: RefObject<HTMLFormElement | null>;
+  disabled?: boolean;
   children:
     | ReactNode
     | ((props: FormContextValue<DefaultValues, Meta>) => ReactNode);
@@ -78,13 +79,14 @@ export function FormProvider<
   defaultValues,
   meta,
   ref,
+  disabled,
   children,
 }: FormProviderProps<DefaultValues, Meta>): JSX.Element {
   const props: FormContextValue<DefaultValues, Meta> = {
     defaultValues: serialize(defaultValues),
     meta,
     formRef: ref,
-    getFieldProps: (options) => getFieldProps(ref, options),
+    getFieldProps: (options) => getFieldProps(ref, { disabled, ...options }),
   };
 
   return (

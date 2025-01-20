@@ -44,11 +44,13 @@ const validityMap: Readonly<
 export interface FieldOptions<FormValues> extends ConstraintOptions {
   name: PathsFromObject<FormValues>;
   onChange?: (event: ChangeEvent<any>) => void;
+  disabled?: boolean | undefined;
   ref?: RefObject<unknown>;
 }
 
 export interface FieldProps extends ConstraintProps {
   name: string;
+  disabled?: boolean | undefined;
   onChange: (event: ChangeEvent<any>) => void;
   ref: RefCallback<unknown>;
 }
@@ -57,10 +59,11 @@ export function getFieldProps<FormValues>(
   formRef: RefObject<HTMLFormElement | null>,
   options: FieldOptions<FormValues>,
 ): FieldProps {
-  const { name, onChange, ref, ...constraints } = options;
+  const { name, onChange, ref, disabled, ...constraints } = options;
 
   return {
     name,
+    disabled,
     ...getConstraintProps(constraints),
     ref: getRefCallback(constraints, ref),
     onChange: getChangeHandler(constraints, onChange),
