@@ -1,7 +1,7 @@
 import { useActionState, useRef } from "react";
-import { parse } from "../../../../src/parse.js";
-import { FormProvider } from "../../../../src/FormProvider.js";
-import { useFormContext } from "../../../../src/useFormContext.js";
+import { parse } from "../../../src/parse.js";
+import { FormProvider } from "../../../src/FormProvider.js";
+import { useFormContext } from "../../../src/useFormContext.js";
 
 interface FormValues {
   name: string;
@@ -41,7 +41,11 @@ async function submit(
   };
 }
 
-export function FormWithNativeReporting() {
+export function FormWithNativeReporting({
+  disabled = false,
+}: {
+  disabled?: boolean;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
   const [actionState, formAction, isPending] = useActionState(submit, {});
 
@@ -50,6 +54,7 @@ export function FormWithNativeReporting() {
       ref={formRef}
       defaultValues={actionState.defaultValues}
       meta={actionState.meta}
+      disabled={disabled}
     >
       {({ getFieldProps, defaultValues }) => (
         <form

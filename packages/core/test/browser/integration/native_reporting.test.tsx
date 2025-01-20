@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "vitest-browser-react";
-import { FormWithNativeReporting } from "./fixtures/FormWithNativeReporting.js";
 import { userEvent } from "@vitest/browser/context";
+import { FormWithNativeReporting } from "../fixtures/FormWithNativeReporting.js";
 
 describe("UI integration tests with native validity reporting", () => {
   it("displays success message after successful submit", async () => {
@@ -115,5 +115,21 @@ describe("UI integration tests with native validity reporting", () => {
     await expect.element(color).toHaveValue("red");
     await expect.element(comment).toHaveValue("This is a long enough comment");
     await expect.element(agreement).toBeChecked();
+  });
+
+  it("disables all associated fields when disabled prop in FormProvider is true", async () => {
+    const screen = render(<FormWithNativeReporting disabled />);
+
+    const name = screen.getByLabelText("name");
+    const animal = screen.getByLabelText("animal");
+    const color = screen.getByLabelText("color");
+    const comment = screen.getByLabelText("comment");
+    const agreement = screen.getByLabelText("agreement");
+
+    await expect.element(name).toBeDisabled();
+    await expect.element(animal).toBeDisabled();
+    await expect.element(color).toBeDisabled();
+    await expect.element(comment).toBeDisabled();
+    await expect.element(agreement).toBeDisabled();
   });
 });

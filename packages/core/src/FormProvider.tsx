@@ -66,6 +66,11 @@ interface FormProviderProps<
    * ```
    */
   ref: RefObject<HTMLFormElement | null>;
+  /**
+   * Disables all associated form inputs when `true`, unless overridden by setting `disabled` in `getFieldProps`.
+   * This may be used with `isPending` from `useActionState` to disable inputs during a pending request.
+   */
+  disabled?: boolean;
   children:
     | ReactNode
     | ((props: FormContextValue<DefaultValues, Meta>) => ReactNode);
@@ -78,13 +83,14 @@ export function FormProvider<
   defaultValues,
   meta,
   ref,
+  disabled,
   children,
 }: FormProviderProps<DefaultValues, Meta>): JSX.Element {
   const props: FormContextValue<DefaultValues, Meta> = {
     defaultValues: serialize(defaultValues),
     meta,
     formRef: ref,
-    getFieldProps: (options) => getFieldProps(ref, options),
+    getFieldProps: (options) => getFieldProps(ref, { disabled, ...options }),
   };
 
   return (
