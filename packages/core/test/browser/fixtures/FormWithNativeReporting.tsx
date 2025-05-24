@@ -1,7 +1,7 @@
 import { useActionState, useRef } from "react";
 import { parse } from "../../../src/parse.js";
 import { FormProvider } from "../../../src/FormProvider.js";
-import { useFormContext } from "../../../src/useFormContext.js";
+import { useForm } from "../../../src/useForm.js";
 
 interface FormValues {
   name: string;
@@ -138,7 +138,7 @@ export function FormWithNativeReporting({
 }
 
 function SubmitMessage() {
-  const { meta } = useFormContext<FormValues, ActionState["meta"]>();
+  const { meta } = useForm<FormValues, ActionState["meta"]>();
 
   return (
     <>

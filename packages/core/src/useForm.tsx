@@ -14,18 +14,18 @@ import { FormContext, type FormContextValue } from "./FormContext.js";
  * }
  *
  * function EmailInput() {
- *   const { defaultValues, getFieldProps } = useFormContext<FormValues>();
+ *   const { defaultValues, getFieldProps } = useForm<FormValues>();
  *   return <input defaultValue={defaultValues?.email} {...getFieldProps({name: "email"})} />;
  * }
  */
-export function useFormContext<
+export function useForm<
   DefaultValues extends AnyRecord | undefined = UnknownRecord | undefined,
   Meta extends AnyRecord | undefined = UnknownRecord | undefined,
 >(): FormContextValue<DefaultValues, Meta> {
   const value = use(FormContext);
 
   if (value === null) {
-    throw new Error("useFormContext must be used under FormProvider");
+    throw new Error("useForm must be used under FormProvider");
   }
 
   return value as FormContextValue<DefaultValues, Meta>;
