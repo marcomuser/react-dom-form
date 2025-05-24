@@ -1,7 +1,7 @@
 import { useActionState, useRef } from "react";
-import { parse } from "../../../src/parse.js";
-import { FormProvider } from "../../../src/FormProvider.js";
-import { useForm } from "../../../src/useForm.js";
+import { parse } from "../../src/parse.js";
+import { FormProvider } from "../../src/FormProvider.js";
+import { useForm } from "../../src/useForm.js";
 
 interface FormValues {
   name: string;
