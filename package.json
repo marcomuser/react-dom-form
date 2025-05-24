@@ -31,17 +31,17 @@
   },
   "homepage": "https://github.com/marcomuser/react-dom-form#readme",
   "devDependencies": {
-    "@eslint/js": "^9.18.0",
-    "@types/react": "^19.0.7",
-    "@vitest/browser": "^3.0.3",
-    "eslint": "^9.18.0",
-    "eslint-plugin-react-hooks": "^5.1.0",
-    "globals": "^15.14.0",
-    "playwright": "^1.49.1",
-    "prettier": "^3.4.2",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.21.0",
-    "vitest": "^3.0.3",
-    "vitest-browser-react": "^0.0.4"
+    "@eslint/js": "^9.27.0",
+    "@types/react": "^19.1.5",
+    "@vitest/browser": "^3.1.4",
+    "eslint": "^9.27.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.1.0",
+    "playwright": "^1.52.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.1.4",
+    "vitest-browser-react": "^0.2.0"
   }
 }
