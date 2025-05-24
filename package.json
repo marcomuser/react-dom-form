@@ -1,5 +1,5 @@
 {
-  "name": "react-dom-form-monorepo",
+  "name": "react-dom-form",
   "version": "0.0.0",
   "private": true,
   "description": "Composable react primitives for form-associated elements",
