@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { getFieldProps } from "../../../src/getFieldProps.js";
+import { getFieldProps } from "../../src/getFieldProps.js";
 
 interface FormValues {
   username: string;
@@ -8,7 +8,7 @@ interface FormValues {
   color: "blue" | "red";
 }
 
-export function FormWithCustomMessages() {
+export function FormWithBrowserMessages() {
   const formRef = useRef<HTMLFormElement>(null);
   return (
     <form ref={formRef}>
@@ -16,15 +16,15 @@ export function FormWithCustomMessages() {
         data-testid="username"
         {...getFieldProps<FormValues>(formRef, {
           name: "username",
-          pattern: { value: RegExp("[a-z]{4,8}"), message: "pattern error" },
+          pattern: RegExp("[a-z]{4,8}"),
         })}
       />
       <input
         data-testid="password"
         {...getFieldProps<FormValues>(formRef, {
           name: "password",
-          minLength: { value: 6, message: "minLength error" },
-          maxLength: { value: 9, message: "maxLength error" },
+          minLength: 6,
+          maxLength: 9,
         })}
       />
       <input
@@ -32,16 +32,16 @@ export function FormWithCustomMessages() {
         data-testid="age"
         {...getFieldProps<FormValues>(formRef, {
           name: "age",
-          min: { value: 0, message: "min error" },
-          max: { value: 120, message: "max error" },
-          step: { value: 1, message: "step error" },
+          min: 0,
+          max: 120,
+          step: 1,
         })}
       />
       <select
         data-testid="color"
         {...getFieldProps<FormValues>(formRef, {
           name: "color",
-          required: { value: true, message: "required error" },
+          required: true,
         })}
       >
         <option value=""></option>

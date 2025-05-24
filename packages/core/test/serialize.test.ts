@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { serialize } from "../../src/serialize.js";
+import { serialize } from "../src/serialize.js";
 
 describe("serialize", () => {
   it("serializes null to undefined", () => {
