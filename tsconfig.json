@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "strict": true,
     "exactOptionalPropertyTypes": true,
+    "erasableSyntaxOnly": true,
     "skipLibCheck": true,
     "types": ["@vitest/browser/providers/playwright"]
   }
