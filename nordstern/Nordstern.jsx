@@ -15,7 +15,7 @@ async function personalSoundtrackAction(formData) {
    *   status: "success" | "error",
    *   value: Output,
    *   issues: Issue[],
-   *   reply: ({resetForm, formErrors, fieldErrors}) => ({ payload, formErrors, fieldErrors })
+   *   reply: ({resetForm, formErrors, fieldErrors}) => ({ status, payload, formErrors, fieldErrors })
    * }
    *
    * reply method transforms StandardSchema Issues to formErrors and fieldErrors
@@ -23,7 +23,7 @@ async function personalSoundtrackAction(formData) {
   const submission = parseWithSchema(personalSoundtrackSchema, formData);
 
   if (submission.status === "error") {
-    // same as return { payload: submission.value, formErrors: [...], fieldErrors: {...} }
+    // same as return { status: "error", payload: submission.value, formErrors: [...], fieldErrors: {...} }
     return submission.reply();
   }
 
@@ -35,7 +35,7 @@ async function personalSoundtrackAction(formData) {
     });
   }
 
-  // same as return { payload: undefined, formErrors: [], fieldErrors: {} }
+  // same as return { status: "success", payload: undefined, formErrors: [], fieldErrors: {} }
   return submission.reply({ resetForm: true });
 }
 
@@ -48,7 +48,15 @@ function SoundtrackForm() {
       defaultValues={personalSoundtrackDefaultValues}
       disabled={false}
     >
-      {({ register, defaultValues, schema, formId, formRef }) => (
+      {({
+        register,
+        defaultValues,
+        lastResult,
+        schema,
+        formId,
+        formRef,
+        update,
+      }) => (
         <>
           <wa-input
             // spreads name, disabled and constraints
@@ -139,16 +147,23 @@ function Select({ name, disabled, required, label, options }) {
 
 function SubmitButton() {
   // useForm cannot be used without schema generic
-  const { register, defaultValues, schema, formId, formRef, state } = useForm(
-    (state) => ({
-      pending: state.pending,
-      valid: state.valid,
-      dirty: state.dirty,
-      disabled: state.disabled,
-      submitted: state.submitted,
-      values: state.values,
-    }),
-  );
+  const {
+    register,
+    defaultValues,
+    lastResult,
+    schema,
+    formId,
+    formRef,
+    update,
+    state,
+  } = useForm((state) => ({
+    pending: state.pending,
+    valid: state.valid,
+    dirty: state.dirty,
+    disabled: state.disabled,
+    submitted: state.submitted,
+    values: state.values,
+  }));
 
   return (
     <wa-button type="submit" disabled={state.disabled} loading={state.pending}>
