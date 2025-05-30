@@ -114,6 +114,7 @@ function SoundtrackForm() {
             placeholder="E-mail"
           ></wa-input>
 
+          <AddBohemianRhapsody />
           <SubmitButton />
         </>
       )}
@@ -241,5 +242,20 @@ function MoodSelect() {
       </wa-select>
       {!state.valid ? <em role="alert">{state.validationMessage}</em> : null}
     </>
+  );
+}
+
+function AddBohemianRhapsody() {
+  const { update, state } = useForm((state) => ({
+    disabled: state.disabled,
+  }));
+
+  return (
+    <wa-button
+      disabled={state.disabled}
+      onClick={() => update({ name: "song", value: "Bohemian Rhapsody" })}
+    >
+      Add Bohemian Rhapsody as your song
+    </wa-button>
   );
 }
