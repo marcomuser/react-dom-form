@@ -44,6 +44,7 @@ function SoundtrackForm() {
     <Form
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
+      schemaResolver={(schema) => schema.shape}
       action={personalSoundtrackAction}
       defaultValues={personalSoundtrackDefaultValues}
       disabled={false}
