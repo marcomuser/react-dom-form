@@ -39,7 +39,9 @@ async function personalSoundtrackAction(formData) {
   return submission.reply({ resetForm: true });
 }
 
-function SoundtrackForm() {
+async function SoundtrackForm() {
+  const personalSoundtrackDefaultValues = await getDefaultValues();
+
   return (
     <Form
       id="personal-soundtrack"
@@ -48,19 +50,20 @@ function SoundtrackForm() {
       action={personalSoundtrackAction}
       defaultValues={personalSoundtrackDefaultValues}
       disabled={false}
+      novalidate
     >
       {({
         register,
-        defaultValues,
-        lastResult,
-        schema,
+        update,
+        defaultValues, // defaultValues are reactive via update fn. Defaults to lastResult.payload or props.defaultValues
+        lastResult, // tracked in useActionState. Initially null
+        disabled, // not part of reactive form state
         formId,
         formRef,
-        update,
       }) => (
         <>
           <wa-input
-            // spreads name, disabled and constraints
+            // spreads name, disabled and potentially constraints
             {...register("artist")}
             defaultValue={defaultValues?.artist}
             label="Artist"
@@ -100,7 +103,6 @@ function SoundtrackForm() {
               },
             ]}
             multiple
-            clearable
           />
 
           <Windows />
@@ -122,12 +124,17 @@ function SoundtrackForm() {
   );
 }
 
-function Select({ name, disabled, required, label, options }) {
+function Select({ name, disabled, required, label, options, multiple }) {
   // useField without schema generic makes value + defaultValue unknown and require type assertions
-  const { defaultValue, state } = useField(name, (state) => ({
-    valid: state.valid,
-    validiationMessage: state.validiationMessage,
-  }));
+  const { defaultValue, value, valid, dirty, validationMessage } = useField(
+    name,
+    (state) => ({
+      value: state.value,
+      valid: state.valid,
+      dirty: state.dirty,
+      validationMessage: state.validationMessage,
+    }),
+  );
 
   return (
     <>
@@ -135,14 +142,15 @@ function Select({ name, disabled, required, label, options }) {
         name={name}
         disabled={disabled}
         required={required}
-        defaultValue={defaultValue}
+        defaultValue={field.defaultValue}
         label={label}
+        multiple={multiple}
       >
         {options.map((opt) => (
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {!state.valid ? <em role="alert">{state.validationMessage}</em> : null}
+      {!valid ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
@@ -151,33 +159,31 @@ function SubmitButton() {
   // useForm cannot be used without schema generic
   const {
     register,
+    update,
     defaultValues,
     lastResult,
-    schema,
     formId,
     formRef,
-    update,
-    state,
+    disabled,
+    pending, // tracked by useActionState
+    valid,
+    dirty,
+    values,
   } = useForm((state) => ({
-    pending: state.pending,
-    valid: state.valid,
-    dirty: state.dirty,
-    disabled: state.disabled,
-    submitted: state.submitted,
-    values: state.values,
+    valid: state.valid, // Tracked in validity form state onChange
+    dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
+    values: state.values, // dom snapshot tracked onChange
   }));
 
   return (
-    <wa-button type="submit" disabled={state.disabled} loading={state.pending}>
+    <wa-button type="submit" disabled={disabled} loading={pending}>
       Submit
     </wa-button>
   );
 }
 
 function Windows() {
-  const { register, defaultValues, state } = useForm((state) => ({
-    disabled: state.disabled,
-  }));
+  const { register, defaultValues, disabled } = useForm();
   const { items, insert, remove, reorder } = useFieldArray("windows");
 
   return (
@@ -198,61 +204,25 @@ function Windows() {
             type="number"
           ></wa-input>
 
-          <wa-button
-            disabled={state.disabled}
-            onClick={() => remove({ index: i })}
-          >
+          <wa-button disabled={disabled} onClick={() => remove({ index: i })}>
             Remove
           </wa-button>
         </li>
       ))}
 
-      <wa-button disabled={state.disabled} onClick={() => insert()}>
+      <wa-button disabled={disabled} onClick={() => insert()}>
         Insert
       </wa-button>
     </div>
   );
 }
 
-function MoodSelect() {
-  const { register } = useForm();
-
-  // useField with schema generic infers value and defaultValue type
-  const { defaultValue, schema, state } = useField("mood", (state) => ({
-    value: state.value,
-    valid: state.valid,
-    dirty: state.dirty,
-    validationMessage: state.validationMessage,
-  }));
-
-  const { chill, energetic, productive, reflective } =
-    schema.shape["mood"].Enum;
-
-  return (
-    <>
-      <wa-select
-        {...register("mood")}
-        defaultValue={defaultValue}
-        label="Current mood"
-      >
-        <wa-option value={energetic}>Energetic</wa-option>
-        <wa-option value={chill}>Chill</wa-option>
-        <wa-option value={reflective}>Reflective</wa-option>
-        <wa-option value={productive}>Productive</wa-option>
-      </wa-select>
-      {!state.valid ? <em role="alert">{state.validationMessage}</em> : null}
-    </>
-  );
-}
-
 function AddBohemianRhapsody() {
-  const { update, state } = useForm((state) => ({
-    disabled: state.disabled,
-  }));
+  const { update, disabled } = useForm();
 
   return (
     <wa-button
-      disabled={state.disabled}
+      disabled={disabled}
       onClick={() => update({ name: "song", value: "Bohemian Rhapsody" })}
     >
       Add Bohemian Rhapsody as your song
