@@ -48,6 +48,8 @@ async function SoundtrackForm() {
       schema={personalSoundtrackSchema}
       schemaResolver={(schema) => schema.shape}
       action={personalSoundtrackAction}
+      shouldValidate="onSubmit"
+      shouldRevalidate="onChange"
       defaultValues={personalSoundtrackDefaultValues}
       disabled={false}
       novalidate
