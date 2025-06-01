@@ -50,16 +50,13 @@ async function SoundtrackForm() {
       shouldValidate="onSubmit"
       shouldRevalidate="onChange"
       defaultValues={personalSoundtrackDefaultValues}
-      disabled={false}
-      novalidate
+      noNativeErrorReporting
     >
       {({
-        register, // spreads name, disabled and potentially constraints on inputs
+        register, // spreads name and potentially constraints on inputs
         update, // update form values. Handled internally via form.elements.findByName().value = value
         defaultValues, // Either lastResult.payload or props.defaultValues
         lastResult, // tracked in useActionState. Initially null
-        disabled, // not part of reactive form state
-        submitted, // tracks if onSubmit handler was called. Not the same as lastResult.status!
         pending, // tracked by useActionState
         formId,
         formRef,
@@ -149,7 +146,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {!showError ? <em role="alert">{validationMessage}</em> : null}
+      {showError ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
@@ -162,7 +159,6 @@ function SubmitButton() {
     lastResult,
     formId,
     formRef,
-    disabled,
     submitted,
     pending,
     valid,
@@ -171,18 +167,19 @@ function SubmitButton() {
   } = useForm((state) => ({
     valid: state.valid, // Tracking validity form state onChange. Also computed once on mount.
     dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
+    submitted: state.submitted, // tracks if onSubmit handler was called. Not the same as lastResult.status!
     values: state.values, // dom snapshot tracked onChange. Subscribe to specific fields or all of them.
   }));
 
   return (
-    <wa-button type="submit" disabled={disabled} loading={pending}>
+    <wa-button type="submit" loading={pending}>
       Submit
     </wa-button>
   );
 }
 
 function Windows() {
-  const { register, defaultValues, disabled } = useForm();
+  const { register, defaultValues } = useForm();
   const { items, insert, remove, reorder } = useFieldArray("windows");
 
   return (
@@ -203,25 +200,20 @@ function Windows() {
             type="number"
           ></wa-input>
 
-          <wa-button disabled={disabled} onClick={() => remove({ index: i })}>
-            Remove
-          </wa-button>
+          <wa-button onClick={() => remove({ index: i })}>Remove</wa-button>
         </li>
       ))}
 
-      <wa-button disabled={disabled} onClick={() => insert()}>
-        Insert
-      </wa-button>
+      <wa-button onClick={() => insert()}>Insert</wa-button>
     </div>
   );
 }
 
 function AddBohemianRhapsody() {
-  const { update, disabled } = useForm();
+  const { update } = useForm();
 
   return (
     <wa-button
-      disabled={disabled}
       onClick={() => update({ name: "song", value: "Bohemian Rhapsody" })}
     >
       Add Bohemian Rhapsody as your song
