@@ -126,15 +126,14 @@ async function SoundtrackForm() {
 
 function Select({ name, disabled, required, label, options, multiple }) {
   // useField without schema generic makes value + defaultValue unknown and require type assertions
-  const { defaultValue, value, valid, dirty, validationMessage } = useField(
-    name,
-    (state) => ({
+  const { defaultValue, value, reported, valid, dirty, validationMessage } =
+    useField(name, (state) => ({
       value: state.value,
       dirty: state.dirty,
-      valid: state.valid,
+      reported: state.reported, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
+      valid: state.valid, // always reflects the current validity state of the field. Updated on mount and onChange.
       validationMessage: state.validationMessage,
-    }),
-  );
+    }));
 
   return (
     <>
@@ -150,7 +149,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {!valid ? <em role="alert">{validationMessage}</em> : null}
+      {!valid && reported ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
