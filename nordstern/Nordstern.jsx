@@ -179,7 +179,7 @@ function SubmitButton() {
 }
 
 function Windows() {
-  const { register, defaultValues } = useForm();
+  const { register } = useForm();
   const { items, insert, remove, reorder } = useFieldArray("windows");
 
   return (
@@ -188,14 +188,14 @@ function Windows() {
         <li key={item.key}>
           <wa-input
             {...register(`${item.name}.width`)}
-            defaultValue={defaultValues?.windows[i]?.width}
+            defaultValue={item.defaultValues.width}
             label="Window width"
             type="number"
           ></wa-input>
 
           <wa-input
             {...register(`${item.name}.height`)}
-            defaultValue={defaultValues?.windows[i]?.height}
+            defaultValue={item.defaultValues.height}
             label="Window height"
             type="number"
           ></wa-input>
