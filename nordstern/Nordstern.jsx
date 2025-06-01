@@ -133,8 +133,8 @@ function Select({ name, disabled, required, label, options, multiple }) {
     name,
     (state) => ({
       value: state.value,
-      valid: state.valid,
       dirty: state.dirty,
+      valid: state.valid,
       validationMessage: state.validationMessage,
     }),
   );
