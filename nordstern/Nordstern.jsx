@@ -60,7 +60,7 @@ async function SoundtrackForm() {
         defaultValues, // Either lastResult.payload or props.defaultValues
         lastResult, // tracked in useActionState. Initially null
         disabled, // not part of reactive form state
-        submitted, // if there is a lastResult, the form was submitted
+        submitted, // tracks if onSubmit handler was called. Not the same as lastResult.status!
         pending, // tracked by useActionState
         formId,
         formRef,
@@ -173,7 +173,7 @@ function SubmitButton() {
     dirty,
     values,
   } = useForm((state) => ({
-    valid: state.valid, // Tracked in validity form state onChange. Also computed once on mount.
+    valid: state.valid, // Tracked in validity form state onChange/onSubmit depending on validation mode. Also computed once on mount.
     dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
     values: state.values, // dom snapshot tracked onChange. Subscribe to specific fields or all of them.
   }));
