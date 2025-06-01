@@ -1,5 +1,4 @@
 const personalSoundtrackSchema = z.object({
-  mood: z.enum(["energetic", "chill", "reflective", "productive"]),
   activity: z.enum(["working", "exercising", "cooking", "reading"]),
   genres: z.enum(["pop", "indie", "electronic", "hiphop"]).array().min(1),
   artist: z.string().trim().max(100).optional(),
@@ -80,8 +79,6 @@ async function SoundtrackForm() {
             hint="Which one song should definitely be included?"
           ></wa-input>
 
-          <MoodSelect />
-
           <wa-select
             {...register("activity")}
             defaultValue={defaultValues?.activity}
@@ -145,7 +142,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
         name={name}
         disabled={disabled}
         required={required}
-        defaultValue={field.defaultValue}
+        defaultValue={defaultValue}
         label={label}
         multiple={multiple}
       >
