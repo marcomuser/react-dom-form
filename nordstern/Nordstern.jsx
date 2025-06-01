@@ -169,7 +169,7 @@ function SubmitButton() {
     dirty,
     values,
   } = useForm((state) => ({
-    valid: state.valid, // Tracked in validity form state onChange/onSubmit depending on validation mode. Also computed once on mount.
+    valid: state.valid, // Tracking validity form state onChange. Also computed once on mount.
     dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
     values: state.values, // dom snapshot tracked onChange. Subscribe to specific fields or all of them.
   }));
