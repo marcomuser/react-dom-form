@@ -53,17 +53,18 @@ async function SoundtrackForm() {
       novalidate
     >
       {({
-        register,
-        update,
-        defaultValues, // defaultValues are reactive via update fn. Defaults to lastResult.payload or props.defaultValues
+        register, // spreads name, disabled and potentially constraints on inputs
+        update, // update form values. Handled internally via form.elements.findByName().value = value
+        defaultValues, // Either lastResult.payload or props.defaultValues
         lastResult, // tracked in useActionState. Initially null
         disabled, // not part of reactive form state
+        submitted, // if there is a lastResult, the form was submitted
+        pending, // tracked by useActionState
         formId,
         formRef,
       }) => (
         <>
           <wa-input
-            // spreads name, disabled and potentially constraints
             {...register("artist")}
             defaultValue={defaultValues?.artist}
             label="Artist"
@@ -156,7 +157,6 @@ function Select({ name, disabled, required, label, options, multiple }) {
 }
 
 function SubmitButton() {
-  // useForm cannot be used without schema generic
   const {
     register,
     update,
@@ -165,14 +165,15 @@ function SubmitButton() {
     formId,
     formRef,
     disabled,
-    pending, // tracked by useActionState
+    submitted,
+    pending,
     valid,
     dirty,
     values,
   } = useForm((state) => ({
-    valid: state.valid, // Tracked in validity form state onChange
+    valid: state.valid, // Tracked in validity form state onChange. Also computed once on mount.
     dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
-    values: state.values, // dom snapshot tracked onChange
+    values: state.values, // dom snapshot tracked onChange. Subscribe to specific fields or all of them.
   }));
 
   return (
