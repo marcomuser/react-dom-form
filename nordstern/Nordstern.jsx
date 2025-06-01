@@ -1,5 +1,4 @@
 const personalSoundtrackSchema = z.object({
-  mood: z.enum(["energetic", "chill", "reflective", "productive"]),
   activity: z.enum(["working", "exercising", "cooking", "reading"]),
   genres: z.enum(["pop", "indie", "electronic", "hiphop"]).array().min(1),
   artist: z.string().trim().max(100).optional(),
@@ -80,8 +79,6 @@ async function SoundtrackForm() {
             hint="Which one song should definitely be included?"
           ></wa-input>
 
-          <MoodSelect />
-
           <wa-select
             {...register("activity")}
             defaultValue={defaultValues?.activity}
@@ -129,15 +126,14 @@ async function SoundtrackForm() {
 
 function Select({ name, disabled, required, label, options, multiple }) {
   // useField without schema generic makes value + defaultValue unknown and require type assertions
-  const { defaultValue, value, valid, dirty, validationMessage } = useField(
-    name,
-    (state) => ({
+  const { defaultValue, value, showError, valid, dirty, validationMessage } =
+    useField(name, (state) => ({
       value: state.value,
       dirty: state.dirty,
-      valid: state.valid,
+      showError: state.showError, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
+      valid: state.valid, // always reflects the current validity state of the field. Updated on mount and onChange.
       validationMessage: state.validationMessage,
-    }),
-  );
+    }));
 
   return (
     <>
@@ -145,7 +141,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
         name={name}
         disabled={disabled}
         required={required}
-        defaultValue={field.defaultValue}
+        defaultValue={defaultValue}
         label={label}
         multiple={multiple}
       >
@@ -153,7 +149,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {!valid ? <em role="alert">{validationMessage}</em> : null}
+      {!showError ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
@@ -173,7 +169,7 @@ function SubmitButton() {
     dirty,
     values,
   } = useForm((state) => ({
-    valid: state.valid, // Tracked in validity form state onChange/onSubmit depending on validation mode. Also computed once on mount.
+    valid: state.valid, // Tracking validity form state onChange. Also computed once on mount.
     dirty: state.dirty, // comparing initial dom snapshot from form ref callback with current dom snapshot. Tracked onChange
     values: state.values, // dom snapshot tracked onChange. Subscribe to specific fields or all of them.
   }));
