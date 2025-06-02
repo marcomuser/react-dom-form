@@ -47,7 +47,7 @@ async function SoundtrackForm() {
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
       schemaResolver={(schema) => schema.shape}
-      strategy="field"
+      validationStrategy="smart" // field-level schema validation until reported. Then whole form schema parsing.
       report="onSubmit"
       reReport="onChange"
       action={personalSoundtrackAction}
@@ -125,11 +125,11 @@ async function SoundtrackForm() {
 
 function Select({ name, disabled, required, label, options, multiple }) {
   // useField without schema generic makes value + defaultValue unknown and require type assertions
-  const { defaultValue, value, showError, valid, dirty, validationMessage } =
+  const { defaultValue, value, reported, valid, dirty, validationMessage } =
     useField(name, (state) => ({
       value: state.value,
       dirty: state.dirty,
-      showError: state.showError, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
+      reported: state.reported, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
       valid: state.valid, // always reflects the current validity state of the field. Updated on mount and onChange.
       validationMessage: state.validationMessage,
     }));
@@ -148,7 +148,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {showError ? <em role="alert">{validationMessage}</em> : null}
+      {reported ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
