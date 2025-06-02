@@ -3,7 +3,8 @@ const personalSoundtrackSchema = z.object({
   genres: z.enum(["pop", "indie", "electronic", "hiphop"]).array().min(1),
   artist: z.string().trim().max(100).optional(),
   song: z.string().trim().max(150).optional(),
-  email: z.string().email(),
+  email: z.email(),
+  confirmEmail: z.email(),
   windows: z.object({ height: z.string(), width: z.string() }).array(),
 });
 
@@ -46,9 +47,9 @@ async function SoundtrackForm() {
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
       schemaResolver={(schema) => schema.shape}
+      strategy="field"
+      report="onSubmit"
       action={personalSoundtrackAction}
-      shouldValidate="onSubmit"
-      shouldRevalidate="onChange"
       defaultValues={personalSoundtrackDefaultValues}
       noNativeErrorReporting
     >
