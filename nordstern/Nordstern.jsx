@@ -49,6 +49,7 @@ async function SoundtrackForm() {
       schemaResolver={(schema) => schema.shape}
       strategy="field"
       report="onSubmit"
+      reReport="onChange"
       action={personalSoundtrackAction}
       defaultValues={personalSoundtrackDefaultValues}
       noNativeErrorReporting
