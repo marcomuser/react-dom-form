@@ -129,7 +129,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
     useField(name, (state) => ({
       value: state.value,
       dirty: state.dirty,
-      reported: state.reported, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
+      reported: state.reported, // depends on report/reReport props. Switches back to false when field becomes valid again.
       valid: state.valid, // always reflects the current validity state of the field. Updated on mount and onChange.
       validationMessage: state.validationMessage,
     }));
