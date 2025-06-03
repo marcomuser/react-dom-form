@@ -47,8 +47,9 @@ async function SoundtrackForm() {
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
       schemaOptions={{
+        strategy: "hybrid", // "hybrid" | "full". Hybrid: Background validation on change on field level using schema shape. Full schema parsing onSubmit and when (re)report is onChange.
         shapeResolver: (schema) => schema.shape,
-        validationStrategy: "smart", // background onChange validation on field-level. Full schema parsing onSubmit and when (re)report is onChange.
+        debounce: 200,
       }}
       report="onSubmit" // when issues will be reported for the first time to the user. Per field.
       reReport="onChange" // when issues will be reported subsequently. Per field.
