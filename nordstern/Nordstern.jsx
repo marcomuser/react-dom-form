@@ -46,10 +46,12 @@ async function SoundtrackForm() {
     <Form
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
-      schemaResolver={(schema) => schema.shape}
-      validationStrategy="smart" // field-level schema validation until reported. Then whole form schema parsing.
-      report="onSubmit"
-      reReport="onChange"
+      schemaOptions={{
+        shapeResolver: (schema) => schema.shape,
+        validationStrategy: "smart", // background onChange validation on field-level. Full schema parsing onSubmit and when (re)report is onChange.
+      }}
+      report="onSubmit" // when issues will be reported for the first time to the user. Per field.
+      reReport="onChange" // when issues will be reported subsequently. Per field.
       action={personalSoundtrackAction}
       defaultValues={personalSoundtrackDefaultValues}
       noNativeErrorReporting
