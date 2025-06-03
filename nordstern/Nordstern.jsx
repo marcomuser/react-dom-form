@@ -3,7 +3,8 @@ const personalSoundtrackSchema = z.object({
   genres: z.enum(["pop", "indie", "electronic", "hiphop"]).array().min(1),
   artist: z.string().trim().max(100).optional(),
   song: z.string().trim().max(150).optional(),
-  email: z.string().email(),
+  email: z.email(),
+  confirmEmail: z.email(),
   windows: z.object({ height: z.string(), width: z.string() }).array(),
 });
 
@@ -45,10 +46,14 @@ async function SoundtrackForm() {
     <Form
       id="personal-soundtrack"
       schema={personalSoundtrackSchema}
-      schemaResolver={(schema) => schema.shape}
+      schemaOptions={{
+        strategy: "hybrid", // "hybrid" | "full". Hybrid: Background validation on change on field level using schema shape. Full schema parsing onSubmit and when (re)report is onChange.
+        shapeResolver: (schema) => schema.shape,
+        debounce: 200,
+      }}
+      report="onSubmit" // when issues will be reported for the first time to the user. Per field.
+      reReport="onChange" // when issues will be reported subsequently. Per field.
       action={personalSoundtrackAction}
-      shouldValidate="onSubmit"
-      shouldRevalidate="onChange"
       defaultValues={personalSoundtrackDefaultValues}
       noNativeErrorReporting
     >
@@ -123,11 +128,11 @@ async function SoundtrackForm() {
 
 function Select({ name, disabled, required, label, options, multiple }) {
   // useField without schema generic makes value + defaultValue unknown and require type assertions
-  const { defaultValue, value, showError, valid, dirty, validationMessage } =
+  const { defaultValue, value, reported, valid, dirty, validationMessage } =
     useField(name, (state) => ({
       value: state.value,
       dirty: state.dirty,
-      showError: state.showError, // depends on shouldValidate/shouldRevalidate mode. Switches back to false when field becomes valid again.
+      reported: state.reported, // depends on report/reReport props. Switches back to false when field becomes valid again.
       valid: state.valid, // always reflects the current validity state of the field. Updated on mount and onChange.
       validationMessage: state.validationMessage,
     }));
@@ -146,7 +151,7 @@ function Select({ name, disabled, required, label, options, multiple }) {
           <wa-option value={opt.value}>{opt.label}</wa-option>
         ))}
       </wa-select>
-      {showError ? <em role="alert">{validationMessage}</em> : null}
+      {reported ? <em role="alert">{validationMessage}</em> : null}
     </>
   );
 }
